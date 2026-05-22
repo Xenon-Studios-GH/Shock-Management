@@ -1,18 +1,164 @@
 <x-layouts.app title="Stock Management">
-    <div class="space-y-8">
-        <div>
-            <h1 class="text-2xl font-bold text-[#E6EDF3]">Stock Management</h1>
-            <p class="mt-1 text-sm text-[#94A3B8]">Manage your inventory stock levels.</p>
+    <div class="space-y-6">
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
+            <x-card>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-[#94A3B8]">Stock In (30 days)</p>
+                        <p class="mt-1 text-2xl font-bold text-[#22C55E]">+{{ number_format($stockIn30d) }}</p>
+                    </div>
+                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#22C55E]/10">
+                        <svg class="h-5 w-5 text-[#22C55E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                        </svg>
+                    </div>
+                </div>
+            </x-card>
+            <x-card>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-[#94A3B8]">Stock Out (30 days)</p>
+                        <p class="mt-1 text-2xl font-bold text-[#EF4444]">-{{ number_format($stockOut30d) }}</p>
+                    </div>
+                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#EF4444]/10">
+                        <svg class="h-5 w-5 text-[#EF4444]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4m12 0l-4-4m4 4l-4 4"/>
+                        </svg>
+                    </div>
+                </div>
+            </x-card>
+            <x-card>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-[#94A3B8]">Total Inventory</p>
+                        <p class="mt-1 text-2xl font-bold text-[#E6EDF3]">{{ number_format($totalInventory) }}</p>
+                    </div>
+                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#3B82F6]/10">
+                        <svg class="h-5 w-5 text-[#3B82F6]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                        </svg>
+                    </div>
+                </div>
+            </x-card>
         </div>
 
-        <x-card>
-            <div class="flex flex-col items-center justify-center py-16 text-center">
-                <svg class="mb-4 h-12 w-12 text-[#94A3B8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
-                </svg>
-                <h3 class="text-lg font-semibold text-[#E6EDF3]">Coming Soon</h3>
-                <p class="mt-1 text-sm text-[#94A3B8]">Stock management features will be available in the next phase.</p>
+        <!-- Search + Actions Bar -->
+        <div class="sticky top-0 z-30 -mx-8 -mt-2 bg-[#0F1117] px-8 pb-4 pt-4">
+            <div class="flex items-center gap-4">
+                <div class="relative flex-1">
+                    <svg class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#94A3B8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                    <input type="text" id="stockSearch" placeholder="Search by product name, code, or size..." autocomplete="off"
+                        class="w-full rounded-xl border border-[#232A36] bg-[#161B22] pl-10 pr-4 py-2.5 text-sm text-[#E6EDF3] placeholder-[#94A3B8] transition-colors focus:border-[#3B82F6] focus:outline-none focus:ring-1 focus:ring-[#3B82F6]">
+                </div>
+                <button id="toggleFilter" class="rounded-xl border border-[#232A36] bg-[#161B22] px-4 py-2.5 text-sm text-[#94A3B8] hover:bg-[#1C2333] hover:text-[#E6EDF3]">
+                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+                    </svg>
+                </button>
+                <a href="{{ route('stock.in') }}" class="rounded-xl bg-[#22C55E] px-4 py-2.5 text-sm font-medium text-white hover:bg-[#16A34A]">
+                    + Stock In
+                </a>
+                <a href="{{ route('stock.out') }}" class="rounded-xl bg-[#EF4444] px-4 py-2.5 text-sm font-medium text-white hover:bg-[#DC2626]">
+                    - Stock Out
+                </a>
             </div>
-        </x-card>
+        </div>
+
+        <div class="flex gap-6">
+            <!-- Inventory Table -->
+            <div class="flex-1 min-w-0" id="stockTableContainer">
+                @include('stock-management._table')
+            </div>
+
+            <!-- Filter Sidebar -->
+            <div id="filterPanel" class="w-80 shrink-0 hidden">
+                <x-card>
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-sm font-semibold text-[#E6EDF3]">Filters</h3>
+                        <button id="closeFilter" class="text-[#94A3B8] hover:text-[#E6EDF3]">
+                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <form id="filterForm" method="GET" class="space-y-4">
+                        <div>
+                            <label class="mb-1 block text-xs font-medium text-[#94A3B8]">Size</label>
+                            <select name="size" class="w-full rounded-xl border border-[#232A36] bg-[#0F1117] px-3 py-2 text-sm text-[#E6EDF3] focus:border-[#3B82F6] focus:outline-none">
+                                <option value="">All Sizes</option>
+                                @foreach (['S', 'M', 'L', 'XL', 'XXL'] as $size)
+                                    <option value="{{ $size }}">{{ $size }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label class="mb-1 block text-xs font-medium text-[#94A3B8]">Stock Min</label>
+                            <input type="number" name="stock_min" min="0" class="w-full rounded-xl border border-[#232A36] bg-[#0F1117] px-3 py-2 text-sm text-[#E6EDF3] focus:border-[#3B82F6] focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="mb-1 block text-xs font-medium text-[#94A3B8]">Stock Max</label>
+                            <input type="number" name="stock_max" min="0" class="w-full rounded-xl border border-[#232A36] bg-[#0F1117] px-3 py-2 text-sm text-[#E6EDF3] focus:border-[#3B82F6] focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="mb-1 block text-xs font-medium text-[#94A3B8]">Sort</label>
+                            <select name="sort" class="w-full rounded-xl border border-[#232A36] bg-[#0F1117] px-3 py-2 text-sm text-[#E6EDF3] focus:border-[#3B82F6] focus:outline-none">
+                                <option value="newest">Newest</option>
+                                <option value="oldest">Oldest</option>
+                                <option value="stock_high">Stock: High to Low</option>
+                                <option value="stock_low">Stock: Low to High</option>
+                            </select>
+                        </div>
+                        <div class="flex gap-2">
+                            <button type="submit" class="flex-1 rounded-xl bg-[#3B82F6] px-4 py-2 text-sm font-medium text-white hover:bg-[#2563EB]">Apply</button>
+                            <button type="reset" id="resetFilters" class="flex-1 rounded-xl border border-[#232A36] px-4 py-2 text-sm text-[#94A3B8] hover:bg-[#1C2333]">Reset</button>
+                        </div>
+                    </form>
+                </x-card>
+            </div>
+        </div>
     </div>
+
+    <script>
+        document.addEventListener('alpine:init', () => {
+            // Search
+            let searchTimer;
+            document.getElementById('stockSearch').addEventListener('input', function() {
+                clearTimeout(searchTimer);
+                searchTimer = setTimeout(() => {
+                    fetch(`{{ route('stock.search') }}?q=${encodeURIComponent(this.value)}`)
+                        .then(r => r.json())
+                        .then(data => document.getElementById('stockTableContainer').innerHTML = data.html);
+                }, 300);
+            });
+
+            // Filter panel toggle
+            document.getElementById('toggleFilter').addEventListener('click', () => {
+                const panel = document.getElementById('filterPanel');
+                panel.classList.toggle('hidden');
+            });
+            document.getElementById('closeFilter').addEventListener('click', () => {
+                document.getElementById('filterPanel').classList.add('hidden');
+            });
+
+            // Filter form submit
+            document.getElementById('filterForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const params = new URLSearchParams(new FormData(this));
+                fetch(`{{ route('stock.filter') }}?${params}`)
+                    .then(r => r.json())
+                    .then(data => document.getElementById('stockTableContainer').innerHTML = data.html);
+            });
+
+            // Reset filters
+            document.getElementById('resetFilters').addEventListener('click', () => {
+                document.getElementById('filterForm').reset();
+                fetch(`{{ route('stock.filter') }}`)
+                    .then(r => r.json())
+                    .then(data => document.getElementById('stockTableContainer').innerHTML = data.html);
+            });
+        });
+    </script>
 </x-layouts.app>
