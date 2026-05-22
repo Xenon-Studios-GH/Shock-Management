@@ -3,11 +3,66 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
+use App\Services\StockService;
+use Illuminate\Http\Request;
 
 class StockOutController extends Controller
 {
-    public function __invoke()
+    protected StockService $stockService;
+
+    public function __construct(StockService $stockService)
     {
-        return view('stockout.index');
+        $this->stockService = $stockService;
+    }
+
+    public function index()
+    {
+        $products = Product::orderBy('product_name')->get(['id', 'product_code', 'product_name']);
+        return view('stockout.index', compact('products'));
+    }
+
+    public function preview(Request $request)
+    {
+        $validated = $request->validate([
+            'product_id' => ['required', 'exists:products,id'],
+            'size' => ['required', 'in:S,M,L,XL,XXL'],
+            'quantity' => ['required', 'integer', 'min:1'],
+        ]);
+
+        $product = Product::findOrFail($validated['product_id']);
+
+        try {
+            $preview = $this->stockService->previewOut($product, $validated['size'], $validated['quantity']);
+            return response()->json([
+                'product_id' => $product->id,
+                'product_name' => $product->product_name,
+                'product_code' => $product->product_code,
+                'size' => $preview['size'],
+                'current_stock' => $preview['current_stock'],
+                'change' => $preview['change'],
+                'new_stock' => $preview['new_stock'],
+            ]);
+        } catch (\InvalidArgumentException $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 422);
+        }
+    }
+
+    public function confirm(Request $request)
+    {
+        $validated = $request->validate([
+            'product_id' => ['required', 'exists:products,id'],
+            'size' => ['required', 'in:S,M,L,XL,XXL'],
+            'quantity' => ['required', 'integer', 'min:1'],
+        ]);
+
+        $product = Product::findOrFail($validated['product_id']);
+
+        try {
+            $this->stockService->stockOut($product, $validated['size'], $validated['quantity']);
+            return response()->json(['success' => true, 'message' => 'Stock removed successfully.']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 422);
+        }
     }
 }
