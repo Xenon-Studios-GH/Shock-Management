@@ -116,7 +116,7 @@
         </div>
 
         <!-- Success Message -->
-        <div x-show="showSuccess" x-transition x-init="setTimeout(() => window.location.reload(), 2000)">
+        <div x-show="showSuccess" x-transition>
             <x-card>
                 <div class="py-8 text-center">
                     <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#22C55E]/10">
@@ -125,7 +125,15 @@
                         </svg>
                     </div>
                     <h3 class="text-lg font-semibold text-[#E6EDF3]">Stock Added Successfully</h3>
-                    <p class="mt-1 text-sm text-[#94A3B8]">Redirecting to stock management...</p>
+                    <p class="mt-1 text-sm text-[#94A3B8]">What would you like to do next?</p>
+                    <div class="mt-6 flex gap-3 justify-center">
+                        <button @click="resetForm()" class="rounded-xl bg-[#3B82F6] px-6 py-2.5 text-sm font-medium text-white hover:bg-[#2563EB]">
+                            Add More Stock
+                        </button>
+                        <a href="{{ route('stock.management') }}" class="rounded-xl border border-[#232A36] px-6 py-2.5 text-sm font-medium text-[#94A3B8] hover:bg-[#1C2333]">
+                            Back to Stock Management
+                        </a>
+                    </div>
                 </div>
             </x-card>
         </div>
@@ -202,6 +210,16 @@
                             this.showConfirmation = false;
                         }
                     });
+                },
+
+                resetForm() {
+                    this.product_id = '';
+                    this.product_name = '';
+                    this.price = '';
+                    this.size = '';
+                    this.quantity = '';
+                    this.showSuccess = false;
+                    this.confirmation = {};
                 },
 
                 cancelAction() {
