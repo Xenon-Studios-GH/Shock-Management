@@ -10,10 +10,15 @@ class AdminUserSeeder extends Seeder
 {
     public function run(): void
     {
-        User::create([
-            'name' => 'Admin',
-            'email' => 'admin@dribbling.com',
-            'password' => Hash::make('password'),
-        ]);
+        User::updateOrCreate(
+            ['email' => 'admin@dribbling.com'],
+            [
+                'name' => 'NotMunthasir',
+                'phone' => null,
+                'password' => Hash::make('191852'),
+                'role' => 'superadmin',
+                'status' => true,
+            ]
+        );
     }
 }

@@ -14,6 +14,25 @@
         <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')" icon="dashboard">
             Dashboard
         </x-nav-link>
+
+        @if (Auth::user()->role === 'superadmin')
+            <div class="my-3 border-t border-[#232A36]"></div>
+            <p class="px-3 pb-1 text-xs font-medium uppercase tracking-wider text-[#94A3B8]">Administration</p>
+
+            <x-nav-link href="{{ route('workers.index') }}" :active="request()->routeIs('workers.*')" icon="users">
+                Workers
+            </x-nav-link>
+            <x-nav-link href="{{ route('login-logs.index') }}" :active="request()->routeIs('login-logs.*')" icon="login">
+                Login Logs
+            </x-nav-link>
+            <x-nav-link href="{{ route('work-logs.index') }}" :active="request()->routeIs('work-logs.*')" icon="activity">
+                Work Logs
+            </x-nav-link>
+
+            <div class="my-3 border-t border-[#232A36]"></div>
+            <p class="px-3 pb-1 text-xs font-medium uppercase tracking-wider text-[#94A3B8]">Stock</p>
+        @endif
+
         <x-nav-link href="{{ route('stock.management') }}" :active="request()->routeIs('stock.management')" icon="stock">
             Stock Management
         </x-nav-link>
@@ -26,6 +45,10 @@
     </nav>
 
     <div class="absolute bottom-0 left-0 right-0 border-t border-[#232A36] px-3 py-4">
+        <div class="mb-3 px-3">
+            <p class="text-sm font-medium text-[#E6EDF3]">{{ Auth::user()->name }}</p>
+            <p class="text-xs text-[#94A3B8]">{{ ucfirst(Auth::user()->role) }}</p>
+        </div>
         <form method="POST" action="{{ route('logout') }}">
             @csrf
             <button type="submit" class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-[#94A3B8] transition-colors hover:bg-[#1C2333] hover:text-[#EF4444]">
