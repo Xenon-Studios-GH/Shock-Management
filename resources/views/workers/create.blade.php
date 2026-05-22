@@ -32,13 +32,9 @@
 
                 <div>
                     <label for="password" class="mb-2 block text-sm font-medium text-[#E6EDF3]">Password</label>
-                    <div class="flex gap-2">
-                        <input id="password" type="text" name="password" value="{{ old('password', 'Drib@' . rand(1000, 9999)) }}" required
-                            class="block w-full rounded-xl border border-[#232A36] bg-[#0F1117] px-4 py-2.5 text-sm text-[#E6EDF3] placeholder-[#94A3B8] transition-colors focus:border-[#3B82F6] focus:outline-none focus:ring-1 focus:ring-[#3B82F6]">
-                        <button type="button" onclick="document.getElementById('password').value = 'Drib@' + Math.floor(1000 + Math.random() * 9000)" class="rounded-xl border border-[#232A36] bg-[#0F1117] px-3 text-sm text-[#94A3B8] hover:bg-[#1C2333] hover:text-[#E6EDF3]">
-                            Generate
-                        </button>
-                    </div>
+                    <input id="password" type="password" name="password" required
+                        minlength="8"
+                        class="block w-full rounded-xl border border-[#232A36] bg-[#0F1117] px-4 py-2.5 text-sm text-[#E6EDF3] placeholder-[#94A3B8] transition-colors focus:border-[#3B82F6] focus:outline-none focus:ring-1 focus:ring-[#3B82F6]">
                     @error('password') <p class="mt-1 text-sm text-[#EF4444]">{{ $message }}</p> @enderror
                 </div>
 

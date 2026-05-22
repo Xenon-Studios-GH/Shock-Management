@@ -3,6 +3,9 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -16,5 +19,21 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        $exceptions->report(function (Throwable $e) {
+            Log::error($e->getMessage(), [
+                'exception' => get_class($e),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+        });
+
+        $exceptions->render(function (HttpException $e, Request $request) {
+            $status = $e->getStatusCode();
+            if ($request->expectsJson()) {
+                return response()->json(['error' => $e->getMessage()], $status);
+            }
+            if (view()->exists("errors.{$status}")) {
+                return response()->view("errors.{$status}", [], $status);
+            }
+        });
     })->create();

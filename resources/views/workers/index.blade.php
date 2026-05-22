@@ -19,20 +19,7 @@
             </div>
         @endif
 
-        @if (session('created_password'))
-            <div class="rounded-xl border border-[#3B82F6]/30 bg-[#3B82F6]/10 p-4">
-                <div class="flex items-start justify-between">
-                    <div>
-                        <h3 class="text-sm font-medium text-[#3B82F6]">Worker Created Successfully</h3>
-                        <p class="mt-1 text-sm text-[#94A3B8]">Password: <code class="rounded bg-[#0F1117] px-2 py-0.5 font-mono text-[#E6EDF3]">{{ session('created_password') }}</code></p>
-                        <p class="mt-1 text-xs text-[#94A3B8]">Share these credentials with the worker securely.</p>
-                    </div>
-                    <button onclick="navigator.clipboard.writeText('{{ session('created_password') }}')" class="rounded-lg bg-[#3B82F6]/20 px-3 py-1.5 text-xs font-medium text-[#3B82F6] hover:bg-[#3B82F6]/30">
-                        Copy
-                    </button>
-                </div>
-            </div>
-        @endif
+
 
         <x-card padding="p-0">
             <div class="overflow-x-auto">

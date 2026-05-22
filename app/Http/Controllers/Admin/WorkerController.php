@@ -35,7 +35,7 @@ class WorkerController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'unique:users,email'],
             'phone' => ['nullable', 'string', 'max:20'],
-            'password' => ['required', 'string', 'min:6'],
+            'password' => ['required', 'string', 'min:8'],
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
@@ -52,8 +52,7 @@ class WorkerController extends Controller
         );
 
         return redirect()->route('workers.index')
-            ->with('success', 'Worker created successfully.')
-            ->with('created_password', $request->password);
+            ->with('success', 'Worker created successfully.');
     }
 
     public function edit(User $worker)
@@ -74,7 +73,7 @@ class WorkerController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', Rule::unique('users')->ignore($worker->id)],
             'phone' => ['nullable', 'string', 'max:20'],
-            'password' => ['nullable', 'string', 'min:6'],
+            'password' => ['nullable', 'string', 'min:8'],
         ]);
 
         if (!empty($validated['password'])) {
@@ -101,9 +100,10 @@ class WorkerController extends Controller
             abort(404);
         }
 
-        $worker->update(['status' => !$worker->status]);
+        $newStatus = !$worker->status;
+        $worker->update(['status' => $newStatus]);
 
-        $action = $worker->status ? 'activated' : 'deactivated';
+        $action = $newStatus ? 'activated' : 'deactivated';
         $this->workLogService->log(
             'User Updated',
             'user',

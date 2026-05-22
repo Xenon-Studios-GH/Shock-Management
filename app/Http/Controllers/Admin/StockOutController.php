@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Services\StockService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class StockOutController extends Controller
 {
@@ -61,8 +62,11 @@ class StockOutController extends Controller
         try {
             $this->stockService->stockOut($product, $validated['size'], $validated['quantity']);
             return response()->json(['success' => true, 'message' => 'Stock removed successfully.']);
-        } catch (\Exception $e) {
+        } catch (\InvalidArgumentException $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 422);
+        } catch (\Throwable $e) {
+            Log::error('Stock out confirm failed', ['error' => $e->getMessage(), 'product_id' => $product->id]);
+            return response()->json(['success' => false, 'message' => 'An unexpected error occurred.'], 500);
         }
     }
 }

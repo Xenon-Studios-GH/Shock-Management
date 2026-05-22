@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Services\StockService;
 use App\Services\WorkLogService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class StockInController extends Controller
 {
@@ -67,7 +68,7 @@ class StockInController extends Controller
                 'change' => $preview['change'],
                 'new_stock' => $preview['new_stock'],
             ]);
-        } catch (\Exception $e) {
+        } catch (\InvalidArgumentException $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 422);
         }
     }
@@ -85,8 +86,11 @@ class StockInController extends Controller
         try {
             $this->stockService->stockIn($product, $validated['size'], $validated['quantity']);
             return response()->json(['success' => true, 'message' => 'Stock added successfully.']);
-        } catch (\Exception $e) {
+        } catch (\InvalidArgumentException $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 422);
+        } catch (\Throwable $e) {
+            Log::error('Stock in confirm failed', ['error' => $e->getMessage(), 'product_id' => $product->id]);
+            return response()->json(['success' => false, 'message' => 'An unexpected error occurred.'], 500);
         }
     }
 }
