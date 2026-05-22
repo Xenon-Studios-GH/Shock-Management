@@ -29,7 +29,10 @@
                                 <td class="whitespace-nowrap px-6 py-4 text-[#94A3B8]" rowspan="{{ max($product->stocks->count(), 1) }}">৳{{ number_format($product->price, 2) }}</td>
                                 <td class="whitespace-nowrap px-6 py-4 text-[#94A3B8]" rowspan="{{ max($product->stocks->count(), 1) }}">{{ $stock->updated_at->diffForHumans() }}</td>
                                 <td class="whitespace-nowrap px-6 py-4 text-right" rowspan="{{ max($product->stocks->count(), 1) }}">
-                                    <button onclick="showEditModal({{ $product->id }}, '{{ $product->product_name }}', {{ $product->price }})" class="rounded-lg px-3 py-1.5 text-xs font-medium text-[#3B82F6] hover:bg-[#3B82F6]/10">
+                                    <button type="button" class="edit-btn rounded-lg px-3 py-1.5 text-xs font-medium text-[#3B82F6] hover:bg-[#3B82F6]/10"
+                                            data-id="{{ $product->id }}"
+                                            data-name="{{ $product->product_name }}"
+                                            data-price="{{ $product->price }}">
                                         Edit
                                     </button>
                                 </td>
@@ -57,7 +60,10 @@
                             <td class="whitespace-nowrap px-6 py-4 text-[#94A3B8]">৳{{ number_format($product->price, 2) }}</td>
                             <td class="whitespace-nowrap px-6 py-4 text-[#94A3B8]">—</td>
                             <td class="whitespace-nowrap px-6 py-4 text-right">
-                                <button onclick="showEditModal({{ $product->id }}, '{{ $product->product_name }}', {{ $product->price }})" class="rounded-lg px-3 py-1.5 text-xs font-medium text-[#3B82F6] hover:bg-[#3B82F6]/10">
+                                <button type="button" class="edit-btn rounded-lg px-3 py-1.5 text-xs font-medium text-[#3B82F6] hover:bg-[#3B82F6]/10"
+                                        data-id="{{ $product->id }}"
+                                        data-name="{{ $product->product_name }}"
+                                        data-price="{{ $product->price }}">
                                     Edit
                                 </button>
                             </td>
@@ -79,9 +85,9 @@
 </x-card>
 
 <!-- Edit Modal -->
-<div id="editModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/50">
+<div id="editModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/50" role="dialog" aria-modal="true" aria-labelledby="modal-title">
     <x-card class="w-full max-w-md">
-        <h3 class="text-lg font-semibold text-[#E6EDF3]">Edit Product</h3>
+        <h3 id="modal-title" class="text-lg font-semibold text-[#E6EDF3]">Edit Product</h3>
         <form id="editForm" method="POST" class="mt-4 space-y-4">
             @csrf
             @method('PUT')
@@ -97,20 +103,29 @@
             </div>
             <div class="flex items-center gap-3">
                 <button type="submit" class="rounded-xl bg-[#3B82F6] px-4 py-2.5 text-sm font-medium text-white hover:bg-[#2563EB]">Save</button>
-                <button type="button" onclick="closeEditModal()" class="text-sm text-[#94A3B8] hover:text-[#E6EDF3]">Cancel</button>
+                <button type="button" class="cancel-btn text-sm text-[#94A3B8] hover:text-[#E6EDF3]">Cancel</button>
             </div>
         </form>
     </x-card>
 </div>
 
 <script>
-    function showEditModal(id, name, price) {
-        document.getElementById('editForm').action = `{{ url('stock/products') }}/${id}`;
-        document.getElementById('editName').value = name;
-        document.getElementById('editPrice').value = price;
-        document.getElementById('editModal').classList.remove('hidden');
-    }
-    function closeEditModal() {
-        document.getElementById('editModal').classList.add('hidden');
-    }
+    document.addEventListener('click', function(e) {
+        const btn = e.target.closest('.edit-btn');
+        if (btn) {
+            document.getElementById('editForm').action = '{{ url('stock/products') }}/' + btn.dataset.id;
+            document.getElementById('editName').value = btn.dataset.name;
+            document.getElementById('editPrice').value = btn.dataset.price;
+            document.getElementById('editModal').classList.remove('hidden');
+            return;
+        }
+        if (e.target.closest('#editModal .cancel-btn') || e.target.id === 'editModal') {
+            document.getElementById('editModal').classList.add('hidden');
+        }
+    });
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && !document.getElementById('editModal').classList.contains('hidden')) {
+            document.getElementById('editModal').classList.add('hidden');
+        }
+    });
 </script>
