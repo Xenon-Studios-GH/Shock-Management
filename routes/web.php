@@ -7,6 +7,9 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\StockManagementController;
 use App\Http\Controllers\Admin\StockInController;
 use App\Http\Controllers\Admin\StockOutController;
+use App\Http\Controllers\Admin\StockSearchController;
+use App\Http\Controllers\Admin\StockFilterController;
+use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\WorkerController;
 use App\Http\Controllers\Admin\LoginLogController;
 use App\Http\Controllers\Admin\WorkLogController;
@@ -21,6 +24,25 @@ Route::middleware('auth')->group(function () {
 
     Route::get('dashboard', DashboardController::class)->name('dashboard');
 
+    // Stock management
+    Route::get('stock-management', StockManagementController::class)->name('stock.management');
+    Route::get('stock/search', StockSearchController::class)->name('stock.search');
+    Route::get('stock/filter', StockFilterController::class)->name('stock.filter');
+    Route::put('stock/products/{product}', [ProductController::class, 'update'])->name('stock.products.update');
+
+    // Stock In
+    Route::get('stockin', [StockInController::class, 'index'])->name('stock.in');
+    Route::post('stockin/preview', [StockInController::class, 'preview'])->name('stock.in.preview');
+    Route::post('stockin/confirm', [StockInController::class, 'confirm'])->name('stock.in.confirm');
+
+    // Stock Out
+    Route::get('stockout', [StockOutController::class, 'index'])->name('stock.out');
+    Route::post('stockout/preview', [StockOutController::class, 'preview'])->name('stock.out.preview');
+    Route::post('stockout/confirm', [StockOutController::class, 'confirm'])->name('stock.out.confirm');
+
+    // Product (create via AJAX from stockin)
+    Route::post('stock/products', [ProductController::class, 'store'])->name('stock.products.store');
+
     Route::middleware('role:superadmin')->group(function () {
         Route::get('workers', [WorkerController::class, 'index'])->name('workers.index');
         Route::get('workers/create', [WorkerController::class, 'create'])->name('workers.create');
@@ -28,14 +50,9 @@ Route::middleware('auth')->group(function () {
         Route::get('workers/{worker}/edit', [WorkerController::class, 'edit'])->name('workers.edit');
         Route::put('workers/{worker}', [WorkerController::class, 'update'])->name('workers.update');
         Route::post('workers/{worker}/toggle-status', [WorkerController::class, 'toggleStatus'])->name('workers.toggle-status');
-
         Route::get('login-logs', [LoginLogController::class, 'index'])->name('login-logs.index');
         Route::get('work-logs', [WorkLogController::class, 'index'])->name('work-logs.index');
     });
-
-    Route::get('stock-management', StockManagementController::class)->name('stock.management');
-    Route::get('stockin', StockInController::class)->name('stock.in');
-    Route::get('stockout', StockOutController::class)->name('stock.out');
 
     Route::redirect('/', 'dashboard');
 });
