@@ -20,11 +20,10 @@ class DashboardController extends Controller
             ->whereDate('created_at', today())->sum('quantity');
         $stockOutToday = StockTransaction::where('type', 'out')
             ->whereDate('created_at', today())->sum('quantity');
-        $totalTransactions = StockTransaction::count();
 
         return view('dashboard.index', compact(
             'totalWorkers', 'recentLogs',
-            'totalStock', 'stockInToday', 'stockOutToday', 'totalTransactions'
+            'totalStock', 'stockInToday', 'stockOutToday'
         ));
     }
 }
