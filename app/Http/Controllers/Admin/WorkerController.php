@@ -21,7 +21,8 @@ class WorkerController extends Controller
     public function index()
     {
         $workers = User::where('role', 'staff')->latest()->paginate(20);
-        return view('workers.index', compact('workers'));
+        $admins = User::whereIn('role', ['superadmin', 'admin'])->latest()->get();
+        return view('workers.index', compact('workers', 'admins'));
     }
 
     public function create()
@@ -35,11 +36,11 @@ class WorkerController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'unique:users,email'],
             'phone' => ['nullable', 'string', 'max:20'],
+            'role' => ['required', Rule::in(['staff', 'admin', 'superadmin'])],
             'password' => ['required', 'string', 'min:8'],
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
-        $validated['role'] = 'staff';
         $validated['status'] = true;
 
         $user = User::create($validated);
@@ -57,22 +58,16 @@ class WorkerController extends Controller
 
     public function edit(User $worker)
     {
-        if ($worker->role !== 'staff') {
-            abort(404);
-        }
         return view('workers.edit', compact('worker'));
     }
 
     public function update(Request $request, User $worker)
     {
-        if ($worker->role !== 'staff') {
-            abort(404);
-        }
-
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', Rule::unique('users')->ignore($worker->id)],
             'phone' => ['nullable', 'string', 'max:20'],
+            'role' => ['required', Rule::in(['staff', 'admin', 'superadmin'])],
             'password' => ['nullable', 'string', 'min:8'],
         ]);
 
@@ -96,10 +91,6 @@ class WorkerController extends Controller
 
     public function toggleStatus(User $worker)
     {
-        if ($worker->role !== 'staff') {
-            abort(404);
-        }
-
         $newStatus = !$worker->status;
         $worker->update(['status' => $newStatus]);
 

@@ -31,6 +31,17 @@
                 </div>
 
                 <div>
+                    <label for="role" class="mb-2 block text-sm font-medium text-[#E6EDF3]">Role</label>
+                    <select id="role" name="role" required
+                        class="block w-full rounded-xl border border-[#232A36] bg-[#0F1117] px-4 py-2.5 text-sm text-[#E6EDF3] transition-colors focus:border-[#3B82F6] focus:outline-none focus:ring-1 focus:ring-[#3B82F6]">
+                        <option value="staff" {{ old('role') === 'staff' ? 'selected' : '' }}>Staff</option>
+                        <option value="admin" {{ old('role') === 'admin' ? 'selected' : '' }}>Admin</option>
+                        <option value="superadmin" {{ old('role') === 'superadmin' ? 'selected' : '' }}>Superadmin</option>
+                    </select>
+                    @error('role') <p class="mt-1 text-sm text-[#EF4444]">{{ $message }}</p> @enderror
+                </div>
+
+                <div>
                     <label for="password" class="mb-2 block text-sm font-medium text-[#E6EDF3]">Password</label>
                     <input id="password" type="password" name="password" required
                         minlength="8"

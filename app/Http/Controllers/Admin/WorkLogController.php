@@ -20,7 +20,7 @@ class WorkLogController extends Controller
     {
         $filters = $request->only(['user_id', 'module', 'action', 'date_from', 'date_to']);
         $logs = $this->workLogService->getLogs($filters);
-        $users = User::whereIn('role', ['superadmin', 'staff'])->orderBy('name')->get(['id', 'name', 'email']);
+        $users = User::whereIn('role', ['superadmin', 'admin', 'staff'])->orderBy('name')->get(['id', 'name', 'email']);
 
         return view('work-logs.index', compact('logs', 'users'));
     }

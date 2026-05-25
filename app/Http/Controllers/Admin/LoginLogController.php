@@ -20,7 +20,7 @@ class LoginLogController extends Controller
     {
         $filters = $request->only(['user_id', 'email', 'date_from', 'date_to', 'status']);
         $logs = $this->loginLogService->getLogs($filters);
-        $users = User::whereIn('role', ['superadmin', 'staff'])->orderBy('name')->get(['id', 'name', 'email']);
+        $users = User::whereIn('role', ['superadmin', 'admin', 'staff'])->orderBy('name')->get(['id', 'name', 'email']);
 
         return view('login-logs.index', compact('logs', 'users'));
     }
