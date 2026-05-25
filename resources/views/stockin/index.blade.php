@@ -14,7 +14,7 @@
                         class="w-full rounded-xl border border-[#232A36] bg-[#0F1117] px-4 py-2.5 text-sm text-[#E6EDF3] focus:border-[#3B82F6] focus:outline-none">
                         <option value="">Select product...</option>
                         @foreach ($products as $product)
-                            <option value="{{ $product->id }}">{{ $product->product_code }} — {{ $product->product_name }}</option>
+                        <option value="{{ $product->id }}">{{ $product->product_code }} — {{ $product->product_name }}</option>
                         @endforeach
                         <option value="new">+ New Product</option>
                     </select>
@@ -39,12 +39,12 @@
                     <label class="mb-2 block text-sm font-medium text-[#E6EDF3]">Size</label>
                     <div class="flex gap-2">
                         @foreach (\App\Models\Stock::SIZES as $s)
-                            <label class="flex-1 cursor-pointer">
-                                <input type="radio" x-model="size" name="size" value="{{ $s }}" class="peer sr-only">
-                                <div class="rounded-xl border border-[#232A36] bg-[#0F1117] px-4 py-3 text-center text-sm text-[#94A3B8] transition-colors peer-checked:border-[#3B82F6] peer-checked:bg-[#3B82F6]/10 peer-checked:text-[#3B82F6]">
-                                    {{ $s }}
-                                </div>
-                            </label>
+                        <label class="flex-1 cursor-pointer">
+                            <input type="radio" x-model="size" name="size" value="{{ $s }}" class="peer sr-only">
+                            <div class="rounded-xl border border-[#232A36] bg-[#0F1117] px-4 py-3 text-center text-sm text-[#94A3B8] transition-colors peer-checked:border-[#3B82F6] peer-checked:bg-[#3B82F6]/10 peer-checked:text-[#3B82F6]">
+                                {{ $s }}
+                            </div>
+                        </label>
                         @endforeach
                     </div>
                 </div>
@@ -70,7 +70,7 @@
                     <div class="text-center">
                         <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#22C55E]/10">
                             <svg class="h-6 w-6 text-[#22C55E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                             </svg>
                         </div>
                         <h3 class="text-lg font-semibold text-[#E6EDF3]">Confirm Stock In</h3>
@@ -119,18 +119,18 @@
 
             <!-- Mobile: bottom sheet -->
             <div x-show="showConfirmation" x-cloak
-                 x-transition:enter="transition ease-out duration-300"
-                 x-transition:enter-start="translate-y-full"
-                 x-transition:enter-end="translate-y-0"
-                 x-transition:leave="transition ease-in duration-200"
-                 x-transition:leave-start="translate-y-0"
-                 x-transition:leave-end="translate-y-full"
-                 class="fixed inset-x-0 bottom-0 z-50 rounded-t-2xl border border-[#232A36] bg-[#161B22] p-6 shadow-xl md:hidden">
+                x-transition:enter="transition ease-out duration-300"
+                x-transition:enter-start="translate-y-full"
+                x-transition:enter-end="translate-y-0"
+                x-transition:leave="transition ease-in duration-200"
+                x-transition:leave-start="translate-y-0"
+                x-transition:leave-end="translate-y-full"
+                class="fixed inset-x-0 bottom-0 z-50 rounded-t-2xl border border-[#232A36] bg-[#161B22] p-6 shadow-xl md:hidden">
                 <div class="mx-auto mb-4 h-1.5 w-10 rounded-full bg-[#232A36]"></div>
                 <div class="text-center">
                     <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#22C55E]/10">
                         <svg class="h-6 w-6 text-[#22C55E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                         </svg>
                     </div>
                     <h3 class="text-lg font-semibold text-[#E6EDF3]">Confirm Stock In</h3>
@@ -175,11 +175,11 @@
 
             <!-- Mobile backdrop -->
             <div x-show="showConfirmation" x-cloak
-                 x-transition:enter="transition-opacity duration-300"
-                 x-transition:leave="transition-opacity duration-200"
-                 class="fixed inset-0 z-40 bg-black/50 md:hidden"
-                 @click="cancelAction()"
-                 aria-hidden="true"></div>
+                x-transition:enter="transition-opacity duration-300"
+                x-transition:leave="transition-opacity duration-200"
+                class="fixed inset-0 z-40 bg-black/50 md:hidden"
+                @click="cancelAction()"
+                aria-hidden="true"></div>
         </div>
 
         <!-- Success Message -->
@@ -188,7 +188,7 @@
                 <div class="py-8 text-center">
                     <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#22C55E]/10">
                         <svg class="h-8 w-8 text-[#22C55E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                         </svg>
                     </div>
                     <h3 class="text-lg font-semibold text-[#E6EDF3]">Stock Added Successfully</h3>
@@ -228,32 +228,36 @@
 
                 submitPreview() {
                     this.error = '';
-                    fetch('{{ route('stock.in.preview') }}', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
-                        body: JSON.stringify({
-                            product_id: this.product_id,
-                            product_name: this.product_name,
-                            price: this.price,
-                            size: this.size,
-                            quantity: this.quantity,
+                    fetch('{{ route('
+                            stock.in.preview ') }}', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                },
+                                body: JSON.stringify({
+                                    product_id: this.product_id,
+                                    product_name: this.product_name,
+                                    price: this.price,
+                                    size: this.size,
+                                    quantity: this.quantity,
+                                })
+                            })
+                        .then(r => r.json())
+                        .then(data => {
+                            if (data.success === false) {
+                                this.error = data.message;
+                                return;
+                            }
+                            this.confirmation = data;
+                            this.showConfirmation = true;
+                            this.countdown = 5;
+                            this.timer = setInterval(() => {
+                                this.countdown--;
+                                if (this.countdown <= 0) this.confirmStockIn();
+                            }, 1000);
                         })
-                    })
-                    .then(r => r.json())
-                    .then(data => {
-                        if (data.success === false) {
-                            this.error = data.message;
-                            return;
-                        }
-                        this.confirmation = data;
-                        this.showConfirmation = true;
-                        this.countdown = 5;
-                        this.timer = setInterval(() => {
-                            this.countdown--;
-                            if (this.countdown <= 0) this.confirmStockIn();
-                        }, 1000);
-                    })
-                    .catch(e => this.error = 'An error occurred.');
+                        .catch(e => this.error = 'An error occurred.');
                 },
 
                 confirmStockIn() {
@@ -267,20 +271,24 @@
                         body.product_name = this.product_name;
                         body.price = this.price;
                     }
-                    fetch('{{ route('stock.in.confirm') }}', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
-                        body: JSON.stringify(body),
-                    })
-                    .then(r => r.json())
-                    .then(data => {
-                        if (data.success) {
-                            window.location.href = '/stock-management/' + data.product_id;
-                        } else {
-                            this.error = data.message;
-                            this.showConfirmation = false;
-                        }
-                    });
+                    fetch('{{ route('
+                            stock.in.confirm ') }}', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                },
+                                body: JSON.stringify(body),
+                            })
+                        .then(r => r.json())
+                        .then(data => {
+                            if (data.success) {
+                                window.location.href = '/stock-management/' + data.product_id;
+                            } else {
+                                this.error = data.message;
+                                this.showConfirmation = false;
+                            }
+                        });
                 },
 
                 resetForm() {

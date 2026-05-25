@@ -12,7 +12,7 @@
         <select name="product_id" class="w-full rounded-xl border border-[#232A36] bg-[#0F1117] px-3 py-2 text-sm text-[#E6EDF3] focus:border-[#3B82F6] focus:outline-none">
             <option value="">All Products</option>
             @foreach ($products as $product)
-                <option value="{{ $product->id }}">{{ $product->product_code }} — {{ $product->product_name }}</option>
+            <option value="{{ $product->id }}">{{ $product->product_code }} — {{ $product->product_name }}</option>
             @endforeach
         </select>
     </div>

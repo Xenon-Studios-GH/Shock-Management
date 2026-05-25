@@ -11,7 +11,7 @@
                     </div>
                     <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#3B82F6]/10">
                         <svg class="h-5 w-5 text-[#3B82F6]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                         </svg>
                     </div>
                 </div>
@@ -25,7 +25,7 @@
                     </div>
                     <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#22C55E]/10">
                         <svg class="h-5 w-5 text-[#22C55E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                         </svg>
                     </div>
                 </div>
@@ -39,7 +39,7 @@
                     </div>
                     <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#EF4444]/10">
                         <svg class="h-5 w-5 text-[#EF4444]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4m12 0l-4-4m4 4l-4 4"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4m12 0l-4-4m4 4l-4 4" />
                         </svg>
                     </div>
                 </div>
@@ -52,19 +52,19 @@
                 <h3 class="text-lg font-semibold text-[#E6EDF3]">Recent Activity</h3>
                 <div class="mt-4 space-y-3">
                     @forelse ($recentLogs as $log)
-                        <div class="flex items-start gap-3">
-                            <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#3B82F6]/10">
-                                <svg class="h-4 w-4 text-[#3B82F6]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                            </div>
-                            <div class="flex-1">
-                                <p class="text-sm text-[#E6EDF3]">{{ $log->action }}</p>
-                                <p class="text-xs text-[#94A3B8]">{{ $log->description }} · {{ $log->created_at->diffForHumans() }}</p>
-                            </div>
+                    <div class="flex items-start gap-3">
+                        <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#3B82F6]/10">
+                            <svg class="h-4 w-4 text-[#3B82F6]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
                         </div>
+                        <div class="flex-1">
+                            <p class="text-sm text-[#E6EDF3]">{{ $log->action }}</p>
+                            <p class="text-xs text-[#94A3B8]">{{ $log->description }} · {{ $log->created_at->diffForHumans() }}</p>
+                        </div>
+                    </div>
                     @empty
-                        <p class="text-sm text-[#94A3B8]">No recent activity to display.</p>
+                    <p class="text-sm text-[#94A3B8]">No recent activity to display.</p>
                     @endforelse
                 </div>
             </x-card>

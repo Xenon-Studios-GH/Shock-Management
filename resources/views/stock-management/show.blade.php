@@ -4,9 +4,9 @@
         <div class="flex flex-wrap items-center justify-between gap-4">
             <div>
                 <a href="{{ route('stock.management') }}"
-                   class="mb-2 inline-flex items-center gap-1.5 text-sm text-[#94A3B8] hover:text-[#E6EDF3]">
+                    class="mb-2 inline-flex items-center gap-1.5 text-sm text-[#94A3B8] hover:text-[#E6EDF3]">
                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                     </svg>
                     Back to Stock Management
                 </a>
@@ -14,10 +14,10 @@
                 <p class="mt-1 text-sm text-[#94A3B8] font-mono">{{ $product->product_code }}</p>
             </div>
             <button type="button" id="editProductBtn"
-                    class="inline-flex h-11 items-center gap-1.5 rounded-xl bg-[#F59E0B]/10 px-4 py-2.5 text-sm font-medium text-[#F59E0B] hover:bg-[#F59E0B]/20"
-                    data-id="{{ $product->id }}" data-name="{{ $product->product_name }}" data-price="{{ $product->price }}">
+                class="inline-flex h-11 items-center gap-1.5 rounded-xl bg-[#F59E0B]/10 px-4 py-2.5 text-sm font-medium text-[#F59E0B] hover:bg-[#F59E0B]/20"
+                data-id="{{ $product->id }}" data-name="{{ $product->product_name }}" data-price="{{ $product->price }}">
                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                 </svg>
                 Edit
             </button>
@@ -61,23 +61,23 @@
                         </thead>
                         <tbody class="divide-y divide-[#232A36]">
                             @forelse ($product->stocks as $stock)
-                                <tr>
-                                    <td class="py-3 text-[#E6EDF3] font-medium">{{ $stock->size }}</td>
-                                    <td class="py-3 text-right font-mono text-[#E6EDF3]">{{ number_format($stock->quantity) }}</td>
-                                    <td class="py-3 text-right">
-                                        @if ($stock->quantity > 10)
-                                            <span class="inline-flex items-center gap-1 rounded-full bg-[#22C55E]/10 px-2 py-0.5 text-xs font-medium text-[#22C55E]">In Stock</span>
-                                        @elseif ($stock->quantity > 0)
-                                            <span class="inline-flex items-center gap-1 rounded-full bg-[#F59E0B]/10 px-2 py-0.5 text-xs font-medium text-[#F59E0B]">Low Stock</span>
-                                        @else
-                                            <span class="inline-flex items-center gap-1 rounded-full bg-[#EF4444]/10 px-2 py-0.5 text-xs font-medium text-[#EF4444]">Out of Stock</span>
-                                        @endif
-                                    </td>
-                                </tr>
+                            <tr>
+                                <td class="py-3 text-[#E6EDF3] font-medium">{{ $stock->size }}</td>
+                                <td class="py-3 text-right font-mono text-[#E6EDF3]">{{ number_format($stock->quantity) }}</td>
+                                <td class="py-3 text-right">
+                                    @if ($stock->quantity > 10)
+                                    <span class="inline-flex items-center gap-1 rounded-full bg-[#22C55E]/10 px-2 py-0.5 text-xs font-medium text-[#22C55E]">In Stock</span>
+                                    @elseif ($stock->quantity > 0)
+                                    <span class="inline-flex items-center gap-1 rounded-full bg-[#F59E0B]/10 px-2 py-0.5 text-xs font-medium text-[#F59E0B]">Low Stock</span>
+                                    @else
+                                    <span class="inline-flex items-center gap-1 rounded-full bg-[#EF4444]/10 px-2 py-0.5 text-xs font-medium text-[#EF4444]">Out of Stock</span>
+                                    @endif
+                                </td>
+                            </tr>
                             @empty
-                                <tr>
-                                    <td colspan="3" class="py-6 text-center text-sm text-[#94A3B8]">No stock records found.</td>
-                                </tr>
+                            <tr>
+                                <td colspan="3" class="py-6 text-center text-sm text-[#94A3B8]">No stock records found.</td>
+                            </tr>
                             @endforelse
                         </tbody>
                     </table>
@@ -91,11 +91,11 @@
                     @include('stock-management._transactions')
                 </div>
                 @if ($recentTransactions->hasMorePages())
-                    <button id="loadMoreBtn"
-                            class="mt-4 w-full rounded-xl border border-[#232A36] px-4 py-2.5 text-sm text-[#94A3B8] hover:bg-[#1C2333] hover:text-[#E6EDF3]"
-                            data-next="{{ $recentTransactions->nextPageUrl() }}">
-                        Load More
-                    </button>
+                <button id="loadMoreBtn"
+                    class="mt-4 w-full rounded-xl border border-[#232A36] px-4 py-2.5 text-sm text-[#94A3B8] hover:bg-[#1C2333] hover:text-[#E6EDF3]"
+                    data-next="{{ $recentTransactions->nextPageUrl() }}">
+                    Load More
+                </button>
                 @endif
             </x-card>
         </div>
@@ -144,25 +144,25 @@
 
         <!-- Work Logs -->
         @if ($workLogs->isNotEmpty())
-            <x-card>
-                <h3 class="mb-4 text-sm font-semibold text-[#E6EDF3]">Recent Work Logs</h3>
-                <div class="space-y-3">
-                    @foreach ($workLogs as $log)
-                        <div class="flex items-start justify-between rounded-xl bg-[#0F1117] px-4 py-3">
-                            <div>
-                                <p class="text-sm text-[#E6EDF3]">{{ $log->action }}</p>
-                                <p class="text-xs text-[#94A3B8]">{{ $log->description }}</p>
-                            </div>
-                            <div class="text-right text-xs text-[#94A3B8]">
-                                <p>{{ $log->created_at->diffForHumans() }}</p>
-                                @if ($log->user)
-                                    <p>{{ $log->user->name }}</p>
-                                @endif
-                            </div>
-                        </div>
-                    @endforeach
+        <x-card>
+            <h3 class="mb-4 text-sm font-semibold text-[#E6EDF3]">Recent Work Logs</h3>
+            <div class="space-y-3">
+                @foreach ($workLogs as $log)
+                <div class="flex items-start justify-between rounded-xl bg-[#0F1117] px-4 py-3">
+                    <div>
+                        <p class="text-sm text-[#E6EDF3]">{{ $log->action }}</p>
+                        <p class="text-xs text-[#94A3B8]">{{ $log->description }}</p>
+                    </div>
+                    <div class="text-right text-xs text-[#94A3B8]">
+                        <p>{{ $log->created_at->diffForHumans() }}</p>
+                        @if ($log->user)
+                        <p>{{ $log->user->name }}</p>
+                        @endif
+                    </div>
                 </div>
-            </x-card>
+                @endforeach
+            </div>
+        </x-card>
         @endif
     </div>
 

@@ -2,6 +2,7 @@
 
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,6 +10,7 @@
     <title>{{ $title }} — {{ config('app.name') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
+
 <body class="min-h-screen bg-[#0F1117] text-[#E6EDF3] antialiased">
     <div class="flex min-h-screen" x-data="appLayout()" @keydown.escape.window="sidebarOpen = false">
         <x-sidebar />
@@ -16,12 +18,12 @@
         <div class="flex flex-1 flex-col md:ml-16 lg:ml-64">
             <!-- Top Bar -->
             <header class="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-[#232A36] bg-[#0F1117] px-4 md:px-8"
-                    x-data="{ scrolled: false }"
-                    @scroll.window.passive="scrolled = window.scrollY > 0"
-                    :class="scrolled && 'shadow-lg shadow-black/10'">
+                x-data="{ scrolled: false }"
+                @scroll.window.passive="scrolled = window.scrollY > 0"
+                :class="scrolled && 'shadow-lg shadow-black/10'">
                 <button @click="sidebarOpen = true" class="flex md:hidden h-10 w-10 items-center justify-center rounded-xl text-[#94A3B8] hover:bg-[#1C2333] hover:text-[#E6EDF3]" aria-label="Open menu">
                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
                 </button>
 
@@ -46,7 +48,7 @@
                                 @csrf
                                 <button type="submit" class="flex w-full items-center gap-2 rounded-lg px-2 py-2 text-sm text-[#EF4444] hover:bg-[#1C2333]" role="menuitem">
                                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                                     </svg>
                                     Logout
                                 </button>
@@ -62,12 +64,12 @@
         </div>
 
         <!-- Mobile sidebar backdrop -->
-        <div x-show="sidebarOpen" 
-             x-transition:enter="transition-opacity duration-300"
-             x-transition:leave="transition-opacity duration-200"
-             class="fixed inset-0 z-30 bg-black/50 md:hidden"
-             @click="sidebarOpen = false"
-             aria-hidden="true"></div>
+        <div x-show="sidebarOpen"
+            x-transition:enter="transition-opacity duration-300"
+            x-transition:leave="transition-opacity duration-200"
+            class="fixed inset-0 z-30 bg-black/50 md:hidden"
+            @click="sidebarOpen = false"
+            aria-hidden="true"></div>
     </div>
 
     <script>
@@ -78,4 +80,5 @@
         }
     </script>
 </body>
+
 </html>

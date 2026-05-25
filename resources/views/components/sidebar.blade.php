@@ -3,13 +3,13 @@
 <aside class="fixed left-0 top-0 z-40 flex h-screen flex-col border-r border-[#232A36] bg-[#0F1117] transition-all duration-300
               w-64
               -translate-x-full md:translate-x-0"
-       :class="{'translate-x-0': sidebarOpen}">
+    :class="{'translate-x-0': sidebarOpen}">
 
     <!-- Logo -->
     <div class="flex h-16 shrink-0 items-center gap-3 border-b border-[#232A36] px-4 lg:px-6">
         <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#3B82F6]">
             <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
             </svg>
         </div>
         <span class="text-lg font-bold text-[#E6EDF3]">Dribbling Stock</span>
@@ -18,24 +18,24 @@
     <!-- Navigation -->
     <nav class="flex-1 space-y-1 overflow-y-auto px-2 py-4 lg:px-3" aria-label="Main navigation">
         @if (Auth::user()->role !== 'staff')
-            <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')" icon="dashboard">
-                Dashboard
-            </x-nav-link>
+        <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')" icon="dashboard">
+            Dashboard
+        </x-nav-link>
         @endif
 
         @if (Auth::user()->role === 'superadmin')
-            <div class="my-3 border-t border-[#232A36]"></div>
-            <p class="px-3 pb-1 text-xs font-medium uppercase tracking-wider text-[#94A3B8]">Administration</p>
+        <div class="my-3 border-t border-[#232A36]"></div>
+        <p class="px-3 pb-1 text-xs font-medium uppercase tracking-wider text-[#94A3B8]">Administration</p>
 
-            <x-nav-link href="{{ route('workers.index') }}" :active="request()->routeIs('workers.*')" icon="users">
-                Workers
-            </x-nav-link>
-            <x-nav-link href="{{ route('login-logs.index') }}" :active="request()->routeIs('login-logs.*')" icon="login">
-                Login Logs
-            </x-nav-link>
-            <x-nav-link href="{{ route('work-logs.index') }}" :active="request()->routeIs('work-logs.*')" icon="activity">
-                Work Logs
-            </x-nav-link>
+        <x-nav-link href="{{ route('workers.index') }}" :active="request()->routeIs('workers.*')" icon="users">
+            Workers
+        </x-nav-link>
+        <x-nav-link href="{{ route('login-logs.index') }}" :active="request()->routeIs('login-logs.*')" icon="login">
+            Login Logs
+        </x-nav-link>
+        <x-nav-link href="{{ route('work-logs.index') }}" :active="request()->routeIs('work-logs.*')" icon="activity">
+            Work Logs
+        </x-nav-link>
         @endif
 
         <div class="my-3 border-t border-[#232A36]"></div>
@@ -45,14 +45,14 @@
             Stock Management
         </x-nav-link>
         @if (in_array(Auth::user()->role, ['superadmin', 'admin']))
-            <x-nav-link href="{{ route('products.create') }}" :active="request()->routeIs('products.create')" icon="plus">
-                Add Product
-            </x-nav-link>
+        <x-nav-link href="{{ route('products.create') }}" :active="request()->routeIs('products.create')" icon="plus">
+            Add Product
+        </x-nav-link>
         @endif
         @if (Auth::user()->role !== 'staff')
-            <x-nav-link href="{{ route('stock.activity') }}" :active="request()->routeIs('stock.activity')" icon="activity">
-                Recent Activity
-            </x-nav-link>
+        <x-nav-link href="{{ route('stock.activity') }}" :active="request()->routeIs('stock.activity')" icon="activity">
+            Recent Activity
+        </x-nav-link>
         @endif
         <x-nav-link href="{{ route('stock.in') }}" :active="request()->routeIs('stock.in')" icon="stockin">
             Stock In
@@ -73,7 +73,7 @@
                 @csrf
                 <button type="submit" class="flex w-full items-center justify-center lg:justify-start gap-3 rounded-xl px-3 py-2.5 text-sm text-[#94A3B8] transition-colors hover:bg-[#1C2333] hover:text-[#EF4444]" aria-label="Logout">
                     <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                     </svg>
                     <span>Logout</span>
                 </button>

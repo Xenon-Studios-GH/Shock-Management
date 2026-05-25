@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,13 +8,14 @@
     <title>Forgot Password — {{ config('app.name') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
+
 <body class="min-h-screen bg-[#0F1117] text-[#E6EDF3] antialiased">
     <div class="flex min-h-screen items-center justify-center px-4">
         <div class="w-full max-w-sm">
             <div class="mb-8 text-center">
                 <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#3B82F6]">
                     <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
                     </svg>
                 </div>
                 <h1 class="text-2xl font-bold text-[#E6EDF3]">Reset Password</h1>
@@ -29,13 +31,13 @@
                         <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus autocomplete="email"
                             class="block w-full rounded-xl border border-[#232A36] bg-[#0F1117] px-4 py-2.5 text-sm text-[#E6EDF3] placeholder-[#94A3B8] transition-colors focus:border-[#3B82F6] focus:outline-none focus:ring-1 focus:ring-[#3B82F6]">
                         @error('email')
-                            <p class="text-sm text-[#EF4444]">{{ $message }}</p>
+                        <p class="text-sm text-[#EF4444]">{{ $message }}</p>
                         @enderror
                     </div>
 
                     @if (session('status'))
-                        <p class="mt-4 text-sm text-[#22C55E]">{{ session('status') }}</p>
-                        <p class="mt-1 text-xs text-[#94A3B8]">(Email is logged to storage/logs since mail is in log mode)</p>
+                    <p class="mt-4 text-sm text-[#22C55E]">{{ session('status') }}</p>
+                    <p class="mt-1 text-xs text-[#94A3B8]">(Email is logged to storage/logs since mail is in log mode)</p>
                     @endif
 
                     <button type="submit"
@@ -51,4 +53,5 @@
         </div>
     </div>
 </body>
+
 </html>
