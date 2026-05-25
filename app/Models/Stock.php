@@ -2,12 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Stock extends Model
 {
-    use HasFactory;
+    public const SIZES = ['S', 'M', 'L', 'XL', 'XXL'];
 
     protected $fillable = [
         'product_id',
