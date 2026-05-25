@@ -38,7 +38,7 @@
                 <div>
                     <label class="mb-2 block text-sm font-medium text-[#E6EDF3]">Size</label>
                     <div class="flex gap-2">
-                        @foreach (['S', 'M', 'L', 'XL', 'XXL'] as $s)
+                        @foreach (\App\Models\Stock::SIZES as $s)
                             <label class="flex-1 cursor-pointer">
                                 <input type="radio" x-model="size" name="size" value="{{ $s }}" class="peer sr-only">
                                 <div class="rounded-xl border border-[#232A36] bg-[#0F1117] px-4 py-3 text-center text-sm text-[#94A3B8] transition-colors peer-checked:border-[#3B82F6] peer-checked:bg-[#3B82F6]/10 peer-checked:text-[#3B82F6]">
@@ -100,7 +100,7 @@
                     </div>
 
                     <div class="mt-4 text-center">
-                        <p class="text-sm text-[#94A3B8]">Auto-confirming in <span class="font-medium text-[#E6EDF3]" x-text="countdown"></span> seconds</p>
+                        <p class="text-sm text-[#94A3B8]">Confirming automatically in <span class="font-medium text-[#E6EDF3]" x-text="countdown"></span> seconds</p>
                         <div class="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-[#232A36]">
                             <div class="h-full bg-[#22C55E] transition-all duration-1000 ease-linear" x-bind:style="'width: ' + (countdown / 5 * 100) + '%'"></div>
                         </div>
@@ -158,7 +158,7 @@
                     </div>
                 </div>
                 <div class="mt-4 text-center">
-                    <p class="text-sm text-[#94A3B8]">Auto-confirming in <span class="font-medium text-[#E6EDF3]" x-text="countdown"></span>s</p>
+                    <p class="text-sm text-[#94A3B8]">Confirming automatically in <span class="font-medium text-[#E6EDF3]" x-text="countdown"></span>s</p>
                     <div class="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-[#232A36]">
                         <div class="h-full bg-[#22C55E] transition-all duration-1000 ease-linear" x-bind:style="'width: ' + (countdown / 5 * 100) + '%'"></div>
                     </div>
@@ -250,7 +250,7 @@
                         this.countdown = 5;
                         this.timer = setInterval(() => {
                             this.countdown--;
-                            if (this.countdown <= 0) this.cancelAction();
+                            if (this.countdown <= 0) this.confirmStockIn();
                         }, 1000);
                     })
                     .catch(e => this.error = 'An error occurred.');
