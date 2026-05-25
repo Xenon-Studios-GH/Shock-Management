@@ -21,7 +21,7 @@
 
 
 
-        <x-card padding="p-0">
+        <x-card padding="p-0" class="hidden lg:block">
             <div class="overflow-x-auto">
                 <table class="w-full text-sm">
                     <thead>
@@ -74,5 +74,45 @@
                 </div>
             @endif
         </x-card>
+
+        <div class="block lg:hidden space-y-3">
+            @forelse ($workers as $worker)
+                <x-card class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-[#E6EDF3]">{{ $worker->name }}</p>
+                            <p class="text-xs text-[#94A3B8]">{{ $worker->email }}</p>
+                        </div>
+                        <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium {{ $worker->status ? 'bg-[#22C55E]/10 text-[#22C55E]' : 'bg-[#EF4444]/10 text-[#EF4444]' }}">
+                            {{ $worker->status ? 'Active' : 'Inactive' }}
+                        </span>
+                    </div>
+                    @if ($worker->phone)
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-[#94A3B8]">Phone</span>
+                        <span class="text-[#94A3B8]">{{ $worker->phone }}</span>
+                    </div>
+                    @endif
+                    <div class="flex gap-2 pt-2 border-t border-[#232A36]">
+                        <a href="{{ route('workers.edit', $worker) }}" class="flex-1 rounded-xl bg-[#3B82F6]/10 px-4 py-2.5 text-sm font-medium text-[#3B82F6] text-center hover:bg-[#3B82F6]/20">
+                            Edit
+                        </a>
+                        <form method="POST" action="{{ route('workers.toggle-status', $worker) }}" class="flex-1">
+                            @csrf
+                            <button type="submit" class="w-full rounded-xl bg-[#F59E0B]/10 px-4 py-2.5 text-sm font-medium text-[#F59E0B] hover:bg-[#F59E0B]/20">
+                                {{ $worker->status ? 'Deactivate' : 'Activate' }}
+                            </button>
+                        </form>
+                    </div>
+                </x-card>
+            @empty
+                <x-card class="py-12 text-center">
+                    <p class="text-sm text-[#94A3B8]">No workers found.</p>
+                </x-card>
+            @endforelse
+            @if ($workers->hasPages())
+                <div class="pt-3">{{ $workers->links() }}</div>
+            @endif
+        </div>
     </div>
 </x-layouts.app>

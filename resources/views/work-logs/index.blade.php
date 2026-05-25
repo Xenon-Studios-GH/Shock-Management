@@ -6,8 +6,8 @@
         </div>
 
         <x-card>
-            <form method="GET" class="flex flex-wrap items-end gap-4">
-                <div class="flex-1 min-w-[200px]">
+            <form method="GET" class="flex flex-col md:flex-row md:flex-wrap items-stretch md:items-end gap-3 md:gap-4">
+                <div class="flex-1 min-w-full md:min-w-[200px]">
                     <label class="mb-1 block text-xs font-medium text-[#94A3B8]">User</label>
                     <select name="user_id" class="w-full rounded-xl border border-[#232A36] bg-[#0F1117] px-3 py-2 text-sm text-[#E6EDF3] focus:border-[#3B82F6] focus:outline-none">
                         <option value="">All Users</option>
@@ -38,7 +38,7 @@
             </form>
         </x-card>
 
-        <x-card padding="p-0">
+        <x-card padding="p-0" class="hidden lg:block">
             <div class="overflow-x-auto">
                 <table class="w-full text-sm">
                     <thead>
@@ -79,5 +79,31 @@
                 </div>
             @endif
         </x-card>
+
+        <div class="block lg:hidden space-y-3">
+            @forelse ($logs as $log)
+                <x-card class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm font-medium text-[#E6EDF3]">{{ $log->user->name }}</span>
+                        <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-[#3B82F6]/10 text-[#3B82F6]">
+                            {{ $log->action }}
+                        </span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-[#94A3B8]">Module</span>
+                        <span class="text-[#94A3B8]">{{ ucfirst($log->module) }}</span>
+                    </div>
+                    <div class="text-sm text-[#94A3B8]">{{ $log->description ?? '—' }}</div>
+                    <div class="text-xs text-[#94A3B8]">{{ $log->created_at->format('M d, Y H:i:s') }}</div>
+                </x-card>
+            @empty
+                <x-card class="py-12 text-center">
+                    <p class="text-sm text-[#94A3B8]">No work logs found.</p>
+                </x-card>
+            @endforelse
+            @if ($logs->hasPages())
+                <div class="pt-3">{{ $logs->links() }}</div>
+            @endif
+        </div>
     </div>
 </x-layouts.app>
