@@ -98,18 +98,19 @@ class StockFlowTest extends TestCase
             'size' => 'XL',
             'quantity' => 20,
         ]);
-
         $response->assertStatus(200);
-        $productId = $response->json('product_id');
-        $this->assertNotNull($productId);
-        $this->assertDatabaseHas('products', ['id' => $productId, 'product_name' => 'Test Hoodie']);
+        $this->assertEquals('new', $response->json('product_id'));
 
         $confirmResponse = $this->actingAs($this->user)->post(route('stock.in.confirm'), [
-            'product_id' => $productId,
+            'product_id' => 'new',
+            'product_name' => 'Test Hoodie',
+            'price' => 49.99,
             'size' => 'XL',
             'quantity' => 20,
         ]);
         $confirmResponse->assertJson(['success' => true]);
+
+        $this->assertDatabaseHas('products', ['product_name' => 'Test Hoodie']);
     }
 
     public function test_stock_out_confirm()
@@ -167,5 +168,59 @@ class StockFlowTest extends TestCase
 
         $response = $this->actingAs($admin)->get(route('workers.index'));
         $response->assertStatus(200);
+    }
+
+    public function test_stock_management_show_page_loads()
+    {
+        $product = Product::factory()->create();
+        foreach (['S', 'M', 'L'] as $size) {
+            Stock::factory()->create(['product_id' => $product->id, 'size' => $size]);
+        }
+
+        $response = $this->actingAs($this->user)->get(route('stock.management.show', $product));
+        $response->assertStatus(200);
+        $response->assertSee($product->product_name);
+        $response->assertSee($product->product_code);
+    }
+
+    public function test_stock_in_confirm_returns_product_id()
+    {
+        $product = Product::factory()->create();
+
+        $this->actingAs($this->user)->post(route('stock.in.preview'), [
+            'product_id' => $product->id,
+            'size' => 'L',
+            'quantity' => 5,
+        ]);
+
+        $response = $this->actingAs($this->user)->post(route('stock.in.confirm'), [
+            'product_id' => $product->id,
+            'size' => 'L',
+            'quantity' => 5,
+        ]);
+
+        $response->assertJson(['success' => true]);
+        $response->assertJsonStructure(['success', 'product_id']);
+    }
+
+    public function test_stock_out_confirm_returns_product_id()
+    {
+        $product = Product::factory()->create();
+        Stock::factory()->create(['product_id' => $product->id, 'size' => 'S', 'quantity' => 50]);
+
+        $this->actingAs($this->user)->post(route('stock.out.preview'), [
+            'product_id' => $product->id,
+            'size' => 'S',
+            'quantity' => 10,
+        ]);
+
+        $response = $this->actingAs($this->user)->post(route('stock.out.confirm'), [
+            'product_id' => $product->id,
+            'size' => 'S',
+            'quantity' => 10,
+        ]);
+
+        $response->assertJson(['success' => true]);
+        $response->assertJsonStructure(['success', 'product_id']);
     }
 }

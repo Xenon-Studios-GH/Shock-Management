@@ -61,7 +61,7 @@ class StockOutController extends Controller
 
         try {
             $this->stockService->stockOut($product, $validated['size'], $validated['quantity']);
-            return response()->json(['success' => true, 'message' => 'Stock removed successfully.']);
+            return response()->json(['success' => true, 'message' => 'Stock removed successfully.', 'product_id' => $product->id]);
         } catch (\InvalidArgumentException $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 422);
         } catch (\Throwable $e) {

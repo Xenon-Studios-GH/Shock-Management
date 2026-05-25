@@ -258,20 +258,24 @@
 
                 confirmStockIn() {
                     clearInterval(this.timer);
+                    let body = {
+                        product_id: this.confirmation.product_id,
+                        size: this.confirmation.size,
+                        quantity: this.confirmation.quantity || Math.abs(this.confirmation.change),
+                    };
+                    if (this.confirmation.product_id === 'new') {
+                        body.product_name = this.product_name;
+                        body.price = this.price;
+                    }
                     fetch('{{ route('stock.in.confirm') }}', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
-                        body: JSON.stringify({
-                            product_id: this.confirmation.product_id,
-                            size: this.confirmation.size,
-                            quantity: this.confirmation.quantity || Math.abs(this.confirmation.change),
-                        })
+                        body: JSON.stringify(body),
                     })
                     .then(r => r.json())
                     .then(data => {
                         if (data.success) {
-                            this.showConfirmation = false;
-                            this.showSuccess = true;
+                            window.location.href = '/stock-management/' + data.product_id;
                         } else {
                             this.error = data.message;
                             this.showConfirmation = false;
