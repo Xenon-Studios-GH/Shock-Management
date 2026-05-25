@@ -26,6 +26,8 @@ Route::middleware('auth')->group(function () {
 
     // Stock management
     Route::get('stock-management', StockManagementController::class)->name('stock.management');
+    Route::get('stock-management/{product}', [StockManagementController::class, 'show'])->name('stock.management.show');
+    Route::get('stock-management/{product}/transactions', [StockManagementController::class, 'transactions'])->name('stock.management.transactions');
     Route::get('stock/search', StockSearchController::class)->name('stock.search');
     Route::get('stock/filter', StockFilterController::class)->name('stock.filter');
     Route::put('stock/products/{product}', [ProductController::class, 'update'])->name('stock.products.update');

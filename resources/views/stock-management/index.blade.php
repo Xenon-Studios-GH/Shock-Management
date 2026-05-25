@@ -50,7 +50,7 @@
                     <svg class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#94A3B8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                     </svg>
-                    <input type="text" id="stockSearch" placeholder="Search product, code, or size..." autocomplete="off"
+                    <input type="text" id="stockSearch" placeholder="Search product or code..." autocomplete="off"
                         class="w-full rounded-xl border border-[#232A36] bg-[#161B22] pl-10 pr-4 py-2.5 text-sm text-[#E6EDF3] placeholder-[#94A3B8] transition-colors focus:border-[#3B82F6] focus:outline-none focus:ring-1 focus:ring-[#3B82F6]">
                 </div>
                 <button @click="toggleFilter()" class="flex h-11 w-11 items-center justify-center rounded-xl border border-[#232A36] bg-[#161B22] text-[#94A3B8] hover:bg-[#1C2333] hover:text-[#E6EDF3]" aria-label="Toggle filters">

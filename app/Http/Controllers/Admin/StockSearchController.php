@@ -14,9 +14,6 @@ class StockSearchController extends Controller
 
         $products = Product::where('product_code', 'like', "%{$query}%")
             ->orWhere('product_name', 'like', "%{$query}%")
-            ->orWhereHas('stocks', function ($q) use ($query) {
-                $q->where('size', 'like', "%{$query}%");
-            })
             ->with('stocks')
             ->paginate(20);
 

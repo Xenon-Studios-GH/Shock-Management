@@ -5,36 +5,30 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class StockFilterController extends Controller
 {
     public function __invoke(Request $request)
     {
-        $query = Product::with('stocks');
+        $subQuery = '(SELECT COALESCE(SUM(quantity), 0) FROM stocks WHERE product_id = products.id)';
 
-        if ($request->filled('size')) {
-            $query->whereHas('stocks', function ($q) use ($request) {
-                $q->where('size', $request->size);
-            });
-        }
+        $query = Product::select('products.*')
+            ->selectRaw("{$subQuery} as total_stock")
+            ->with('stocks');
 
         if ($request->filled('stock_min')) {
-            $query->whereHas('stocks', function ($q) use ($request) {
-                $q->where('quantity', '>=', $request->stock_min);
-            });
+            $query->whereRaw("{$subQuery} >= ?", [(int) $request->stock_min]);
         }
-
         if ($request->filled('stock_max')) {
-            $query->whereHas('stocks', function ($q) use ($request) {
-                $q->where('quantity', '<=', $request->stock_max);
-            });
+            $query->whereRaw("{$subQuery} <= ?", [(int) $request->stock_max]);
         }
 
         $sort = $request->get('sort', 'newest');
         $query = match ($sort) {
             'oldest' => $query->oldest(),
-            'stock_high' => $query->withMax('stocks', 'quantity')->orderBy('stocks_max_quantity', 'desc'),
-            'stock_low' => $query->withMax('stocks', 'quantity')->orderBy('stocks_max_quantity', 'asc'),
+            'stock_high' => $query->orderByDesc(DB::raw($subQuery)),
+            'stock_low' => $query->orderBy(DB::raw($subQuery)),
             default => $query->latest(),
         };
 
