@@ -15,6 +15,7 @@ class StockSearchController extends Controller
         $products = Product::where('product_code', 'like', "%{$query}%")
             ->orWhere('product_name', 'like', "%{$query}%")
             ->with('stocks')
+            ->latest('updated_at')
             ->paginate(20);
 
         $html = view('stock-management._table', compact('products'))->render();

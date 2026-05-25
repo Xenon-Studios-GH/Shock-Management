@@ -26,10 +26,10 @@ class StockFilterController extends Controller
 
         $sort = $request->get('sort', 'newest');
         $query = match ($sort) {
-            'oldest' => $query->oldest(),
+            'oldest' => $query->oldest('updated_at'),
             'stock_high' => $query->orderByDesc(DB::raw($subQuery)),
             'stock_low' => $query->orderBy(DB::raw($subQuery)),
-            default => $query->latest(),
+            default => $query->latest('updated_at'),
         };
 
         $products = $query->paginate(20);

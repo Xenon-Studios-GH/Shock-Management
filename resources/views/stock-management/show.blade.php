@@ -133,9 +133,10 @@
                         <span class="text-[#94A3B8]">Created</span>
                         <span class="text-[#E6EDF3]">{{ $product->created_at->format('d M Y, h:i A') }}</span>
                     </div>
+                    @php $maxUpdatedAt = $product->stocks->pluck('updated_at')->push($product->updated_at)->max(); @endphp
                     <div class="flex justify-between">
                         <span class="text-[#94A3B8]">Last Updated</span>
-                        <span class="text-[#E6EDF3]">{{ $product->updated_at->diffForHumans() }}</span>
+                        <span class="text-[#E6EDF3]">{{ $maxUpdatedAt->diffForHumans() }}</span>
                     </div>
                 </div>
             </x-card>

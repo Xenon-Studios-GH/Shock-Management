@@ -13,7 +13,7 @@ class StockManagementController extends Controller
 {
     public function __invoke(Request $request)
     {
-        $products = Product::with('stocks')->paginate(20);
+        $products = Product::with('stocks')->latest('updated_at')->paginate(20);
         $stockIn30d = StockTransaction::where('type', 'in')
             ->where('created_at', '>=', now()->subDays(30))->sum('quantity');
         $stockOut30d = StockTransaction::where('type', 'out')

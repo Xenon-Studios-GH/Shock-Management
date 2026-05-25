@@ -13,7 +13,10 @@
             </thead>
             <tbody class="divide-y divide-[#232A36]">
                 @forelse ($products as $product)
-                    @php $totalStock = $product->stocks->sum('quantity'); @endphp
+                    @php
+                        $totalStock = $product->stocks->sum('quantity');
+                        $maxUpdatedAt = $product->stocks->pluck('updated_at')->push($product->updated_at)->max();
+                    @endphp
                     <tr class="transition-colors hover:bg-[#1C2333] cursor-pointer" onclick="window.location='{{ route('stock.management.show', $product) }}'">
                         <td class="whitespace-nowrap px-6 py-4 font-mono text-xs text-[#94A3B8]">{{ $product->product_code }}</td>
                         <td class="whitespace-nowrap px-6 py-4 font-medium text-[#E6EDF3]">{{ $product->product_name }}</td>
@@ -21,7 +24,7 @@
                             {{ number_format($totalStock) }}
                         </td>
                         <td class="whitespace-nowrap px-6 py-4 text-[#94A3B8]">৳{{ number_format($product->price, 2) }}</td>
-                        <td class="whitespace-nowrap px-6 py-4 text-[#94A3B8]">{{ $product->updated_at->diffForHumans() }}</td>
+                        <td class="whitespace-nowrap px-6 py-4 text-[#94A3B8]">{{ $maxUpdatedAt->diffForHumans() }}</td>
                         <td class="whitespace-nowrap px-6 py-4 text-right">
                             <a href="{{ route('stock.management.show', $product) }}" class="rounded-lg px-3 py-1.5 text-xs font-medium text-[#3B82F6] hover:bg-[#3B82F6]/10"
                                onclick="event.stopPropagation()">View</a>
@@ -47,7 +50,10 @@
 
 <div class="block lg:hidden space-y-3">
     @forelse ($products as $product)
-        @php $totalStock = $product->stocks->sum('quantity'); @endphp
+        @php
+            $totalStock = $product->stocks->sum('quantity');
+            $maxUpdatedAt = $product->stocks->pluck('updated_at')->push($product->updated_at)->max();
+        @endphp
         <x-card class="space-y-3 cursor-pointer" onclick="window.location='{{ route('stock.management.show', $product) }}'">
             <div class="flex items-start justify-between">
                 <div>
@@ -64,7 +70,7 @@
             </div>
             <div class="flex items-center justify-between text-sm">
                 <span class="text-[#94A3B8]">Updated</span>
-                <span class="text-[#94A3B8]">{{ $product->updated_at->diffForHumans() }}</span>
+                <span class="text-[#94A3B8]">{{ $maxUpdatedAt->diffForHumans() }}</span>
             </div>
             <div class="flex gap-2 pt-2 border-t border-[#232A36]">
                 <a href="{{ route('stock.management.show', $product) }}" class="flex-1 rounded-xl bg-[#3B82F6]/10 px-4 py-2.5 text-sm font-medium text-[#3B82F6] text-center hover:bg-[#3B82F6]/20"
