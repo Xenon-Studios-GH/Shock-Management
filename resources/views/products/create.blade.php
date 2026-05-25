@@ -19,7 +19,7 @@
                 <div>
                     <label for="price" class="mb-2 block text-sm font-medium text-[#E6EDF3]">Price</label>
                     <div class="relative">
-                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-[#94A3B8]">$</span>
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-[#94A3B8]">৳</span>
                         <input id="price" type="number" name="price" value="{{ old('price') }}" step="0.01" min="0" required
                             class="block w-full rounded-xl border border-[#232A36] bg-[#0F1117] px-10 py-2.5 text-sm text-[#E6EDF3] placeholder-[#94A3B8] transition-colors focus:border-[#3B82F6] focus:outline-none focus:ring-1 focus:ring-[#3B82F6]">
                     </div>
