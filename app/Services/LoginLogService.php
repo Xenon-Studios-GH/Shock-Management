@@ -22,9 +22,7 @@ class LoginLogService
     {
         LoginLog::where('user_id', $userId)
             ->whereNull('logout_at')
-            ->latest()
-            ->first()
-            ?->update(['logout_at' => now(), 'status' => 'logout']);
+            ->update(['logout_at' => now(), 'status' => 'logout']);
     }
 
     public function getLogs(array $filters = [])
