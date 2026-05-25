@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\Stock;
 use App\Services\StockService;
 use App\Services\WorkLogService;
 use Illuminate\Http\Request;
@@ -30,16 +31,17 @@ class StockInController extends Controller
     {
         $validated = $request->validate([
             'product_id' => ['required'],
-            'size' => ['required', 'in:S,M,L,XL,XXL'],
+            'size' => ['required', 'in:' . implode(',', Stock::SIZES)],
             'quantity' => ['required', 'integer', 'min:1'],
-            'product_name' => ['nullable', 'string', 'max:255'],
-            'price' => ['nullable', 'numeric', 'min:0'],
+            'product_name' => ['required_if:product_id,new', 'string', 'max:255'],
+            'price' => ['required_if:product_id,new', 'numeric', 'min:0'],
         ]);
 
         if ($validated['product_id'] === 'new') {
             return response()->json([
                 'product_id' => 'new',
-                'product_name' => $validated['product_name'] ?? 'New Product',
+                'product_name' => $validated['product_name'],
+                'price' => $validated['price'],
                 'product_code' => '—',
                 'size' => $validated['size'],
                 'current_stock' => 0,
@@ -71,17 +73,17 @@ class StockInController extends Controller
     {
         $validated = $request->validate([
             'product_id' => ['required'],
-            'size' => ['required', 'in:S,M,L,XL,XXL'],
+            'size' => ['required', 'in:' . implode(',', Stock::SIZES)],
             'quantity' => ['required', 'integer', 'min:1'],
-            'product_name' => ['nullable', 'string', 'max:255'],
-            'price' => ['nullable', 'numeric', 'min:0'],
+            'product_name' => ['required_if:product_id,new', 'string', 'max:255'],
+            'price' => ['required_if:product_id,new', 'numeric', 'min:0'],
         ]);
 
         if ($validated['product_id'] === 'new') {
             $product = Product::create([
                 'product_code' => Product::generateProductCode(),
-                'product_name' => $validated['product_name'] ?? 'New Product',
-                'price' => $validated['price'] ?? 0,
+                'product_name' => $validated['product_name'],
+                'price' => $validated['price'],
             ]);
 
             $this->workLogService->log(
