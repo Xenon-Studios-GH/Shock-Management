@@ -1,23 +1,30 @@
 @props(['active' => 'dashboard'])
 
-<aside class="fixed left-0 top-0 z-40 h-screen w-64 border-r border-[#232A36] bg-[#0F1117]">
-    <div class="flex h-16 items-center gap-3 border-b border-[#232A36] px-6">
-        <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-[#3B82F6]">
+<aside class="fixed left-0 top-0 z-40 flex h-screen flex-col border-r border-[#232A36] bg-[#0F1117] transition-all duration-300
+              w-64
+              -translate-x-full md:translate-x-0 md:w-16 lg:w-64"
+       :class="{'translate-x-0': sidebarOpen}">
+
+    <!-- Logo -->
+    <div class="flex h-16 shrink-0 items-center gap-3 border-b border-[#232A36] px-4 md:px-3 lg:px-6">
+        <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#3B82F6]">
             <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
             </svg>
         </div>
-        <span class="text-lg font-bold text-[#E6EDF3]">Dribbling Stock</span>
+        <span class="text-lg font-bold text-[#E6EDF3] hidden lg:inline">Dribbling Stock</span>
     </div>
 
-    <nav class="space-y-1 px-3 py-4">
+    <!-- Navigation -->
+    <nav class="flex-1 space-y-1 overflow-y-auto px-2 py-4 md:px-1 lg:px-3" aria-label="Main navigation">
+        <!-- Dashboard -->
         <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')" icon="dashboard">
             Dashboard
         </x-nav-link>
 
         @if (Auth::user()->role === 'superadmin')
             <div class="my-3 border-t border-[#232A36]"></div>
-            <p class="px-3 pb-1 text-xs font-medium uppercase tracking-wider text-[#94A3B8]">Administration</p>
+            <p class="hidden lg:block px-3 pb-1 text-xs font-medium uppercase tracking-wider text-[#94A3B8]">Administration</p>
 
             <x-nav-link href="{{ route('workers.index') }}" :active="request()->routeIs('workers.*')" icon="users">
                 Workers
@@ -30,7 +37,7 @@
             </x-nav-link>
 
             <div class="my-3 border-t border-[#232A36]"></div>
-            <p class="px-3 pb-1 text-xs font-medium uppercase tracking-wider text-[#94A3B8]">Stock</p>
+            <p class="hidden lg:block px-3 pb-1 text-xs font-medium uppercase tracking-wider text-[#94A3B8]">Stock</p>
         @endif
 
         <x-nav-link href="{{ route('stock.management') }}" :active="request()->routeIs('stock.management')" icon="stock">
@@ -44,19 +51,22 @@
         </x-nav-link>
     </nav>
 
-    <div class="absolute bottom-0 left-0 right-0 border-t border-[#232A36] px-3 py-4">
-        <div class="mb-3 px-3">
+    <!-- User Section -->
+    <div class="shrink-0 border-t border-[#232A36] px-3 py-4">
+        <div class="hidden lg:block mb-3 px-3">
             <p class="text-sm font-medium text-[#E6EDF3]">{{ Auth::user()->name }}</p>
             <p class="text-xs text-[#94A3B8]">{{ ucfirst(Auth::user()->role) }}</p>
         </div>
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <button type="submit" class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-[#94A3B8] transition-colors hover:bg-[#1C2333] hover:text-[#EF4444]">
-                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
-                </svg>
-                Logout
-            </button>
-        </form>
+        <div class="flex justify-center lg:justify-start">
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="flex w-full items-center justify-center lg:justify-start gap-3 rounded-xl px-3 py-2.5 text-sm text-[#94A3B8] transition-colors hover:bg-[#1C2333] hover:text-[#EF4444]" aria-label="Logout">
+                    <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                    </svg>
+                    <span class="hidden lg:inline">Logout</span>
+                </button>
+            </form>
+        </div>
     </div>
 </aside>
