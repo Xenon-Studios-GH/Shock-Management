@@ -16,6 +16,11 @@ class ProductController extends Controller
         $this->workLogService = $workLogService;
     }
 
+    public function create()
+    {
+        return view('products.create');
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -34,12 +39,17 @@ class ProductController extends Controller
             "Product {$product->product_name} ({$product->product_code}) was created"
         );
 
-        return response()->json([
-            'id' => $product->id,
-            'product_code' => $product->product_code,
-            'product_name' => $product->product_name,
-            'price' => $product->price,
-        ]);
+        if ($request->wantsJson()) {
+            return response()->json([
+                'id' => $product->id,
+                'product_code' => $product->product_code,
+                'product_name' => $product->product_name,
+                'price' => $product->price,
+            ]);
+        }
+
+        return redirect()->route('stock.management')
+            ->with('success', "Product {$product->product_name} created successfully.");
     }
 
     public function update(Request $request, Product $product)

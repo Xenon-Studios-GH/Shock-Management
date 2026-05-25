@@ -44,7 +44,10 @@ Route::middleware('auth')->group(function () {
     Route::post('stockout/preview', [StockOutController::class, 'preview'])->name('stock.out.preview');
     Route::post('stockout/confirm', [StockOutController::class, 'confirm'])->name('stock.out.confirm');
 
-    // Product (create via AJAX from stockin)
+    // Product
+    Route::middleware('role:superadmin,admin')->group(function () {
+        Route::get('products/create', [ProductController::class, 'create'])->name('products.create');
+    });
     Route::post('stock/products', [ProductController::class, 'store'])->name('stock.products.store');
 
     Route::middleware('role:superadmin')->group(function () {

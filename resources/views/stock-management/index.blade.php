@@ -43,6 +43,12 @@
             </x-card>
         </div>
 
+        @if (session('success'))
+            <div class="rounded-xl border border-[#22C55E]/30 bg-[#22C55E]/10 px-4 py-3 text-sm text-[#22C55E]">
+                {{ session('success') }}
+            </div>
+        @endif
+
         <!-- Search + Actions Bar (sticky below top bar) -->
         <div class="sticky top-16 z-20 -mx-4 -mt-2 bg-[#0F1117] px-4 pb-4 pt-4 md:-mx-8 md:px-8">
             <div class="flex items-center gap-3">
