@@ -73,7 +73,7 @@
                         </div>
                         <div class="flex justify-between text-sm">
                             <span class="text-[#94A3B8]">Removing</span>
-                            <span class="text-[#EF4444]" x-text="confirmation.change"></span>
+                            <span class="text-[#EF4444]" x-text="Math.abs(confirmation.change)"></span>
                         </div>
                         <div class="border-t border-[#232A36] pt-3 flex justify-between text-sm font-medium">
                             <span class="text-[#94A3B8]">New Stock</span>
@@ -132,7 +132,7 @@
                     </div>
                     <div class="flex justify-between text-sm">
                         <span class="text-[#94A3B8]">Removing</span>
-                        <span class="text-[#EF4444]" x-text="confirmation.change"></span>
+                        <span class="text-[#EF4444]" x-text="Math.abs(confirmation.change)"></span>
                     </div>
                     <div class="border-t border-[#232A36] pt-3 flex justify-between text-sm font-medium">
                         <span class="text-[#94A3B8]">New Stock</span>
@@ -246,8 +246,7 @@
                     .then(r => r.json())
                     .then(data => {
                         if (data.success) {
-                            this.showConfirmation = false;
-                            this.showSuccess = true;
+                            window.location.href = '/stock-management/' + data.product_id;
                         } else {
                             this.error = data.message;
                             this.showConfirmation = false;

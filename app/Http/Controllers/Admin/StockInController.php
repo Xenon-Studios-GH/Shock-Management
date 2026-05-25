@@ -36,25 +36,19 @@ class StockInController extends Controller
             'price' => ['nullable', 'numeric', 'min:0'],
         ]);
 
-        $product = null;
-
-        if ($validated['product_id'] === 'new' && !empty($validated['product_name'])) {
-            $count = Product::count();
-            $product = Product::create([
-                'product_code' => 'Dribbling-' . str_pad($count + 1, 4, '0', STR_PAD_LEFT),
-                'product_name' => $validated['product_name'],
-                'price' => $validated['price'] ?? 0,
+        if ($validated['product_id'] === 'new') {
+            return response()->json([
+                'product_id' => 'new',
+                'product_name' => $validated['product_name'] ?? 'New Product',
+                'product_code' => '—',
+                'size' => $validated['size'],
+                'current_stock' => 0,
+                'change' => (int) $validated['quantity'],
+                'new_stock' => (int) $validated['quantity'],
             ]);
-
-            $this->workLogService->log(
-                'Product Created',
-                'stock',
-                $product->id,
-                "Product {$product->product_name} ({$product->product_code}) was created"
-            );
-        } else {
-            $product = Product::findOrFail($validated['product_id']);
         }
+
+        $product = Product::findOrFail($validated['product_id']);
 
         try {
             $preview = $this->stockService->previewIn($product, $validated['size'], $validated['quantity']);
@@ -76,16 +70,33 @@ class StockInController extends Controller
     public function confirm(Request $request)
     {
         $validated = $request->validate([
-            'product_id' => ['required', 'exists:products,id'],
+            'product_id' => ['required'],
             'size' => ['required', 'in:S,M,L,XL,XXL'],
             'quantity' => ['required', 'integer', 'min:1'],
+            'product_name' => ['nullable', 'string', 'max:255'],
+            'price' => ['nullable', 'numeric', 'min:0'],
         ]);
 
-        $product = Product::findOrFail($validated['product_id']);
+        if ($validated['product_id'] === 'new') {
+            $product = Product::create([
+                'product_code' => Product::generateProductCode(),
+                'product_name' => $validated['product_name'] ?? 'New Product',
+                'price' => $validated['price'] ?? 0,
+            ]);
+
+            $this->workLogService->log(
+                'Product Created',
+                'stock',
+                $product->id,
+                "Product {$product->product_name} ({$product->product_code}) was created"
+            );
+        } else {
+            $product = Product::findOrFail($validated['product_id']);
+        }
 
         try {
             $this->stockService->stockIn($product, $validated['size'], $validated['quantity']);
-            return response()->json(['success' => true, 'message' => 'Stock added successfully.']);
+            return response()->json(['success' => true, 'message' => 'Stock added successfully.', 'product_id' => $product->id]);
         } catch (\InvalidArgumentException $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 422);
         } catch (\Throwable $e) {

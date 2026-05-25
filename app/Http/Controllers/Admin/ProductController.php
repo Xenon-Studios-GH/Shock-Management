@@ -23,8 +23,7 @@ class ProductController extends Controller
             'price' => ['required', 'numeric', 'min:0'],
         ]);
 
-        $count = Product::count();
-        $validated['product_code'] = 'Dribbling-' . str_pad($count + 1, 4, '0', STR_PAD_LEFT);
+        $validated['product_code'] = Product::generateProductCode();
 
         $product = Product::create($validated);
 

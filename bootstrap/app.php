@@ -19,14 +19,6 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        $exceptions->report(function (Throwable $e) {
-            Log::error($e->getMessage(), [
-                'exception' => get_class($e),
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-            ]);
-        });
-
         $exceptions->render(function (HttpException $e, Request $request) {
             $status = $e->getStatusCode();
             if ($request->expectsJson()) {
