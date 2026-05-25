@@ -62,9 +62,71 @@
             </form>
         </x-card>
 
-        <!-- Step 2: Confirmation Card -->
-        <div x-show="showConfirmation" x-transition>
-            <x-card>
+        <!-- Step 2: Confirmation -->
+        <div x-show="showConfirmation" x-cloak>
+            <!-- Desktop: centered card -->
+            <div class="hidden md:block">
+                <x-card>
+                    <div class="text-center">
+                        <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#22C55E]/10">
+                            <svg class="h-6 w-6 text-[#22C55E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold text-[#E6EDF3]">Confirm Stock In</h3>
+                    </div>
+
+                    <div class="mt-6 space-y-3 rounded-xl bg-[#0F1117] p-4">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-[#94A3B8]">Product</span>
+                            <span class="text-[#E6EDF3]" x-text="confirmation.product_name"></span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-[#94A3B8]">Size</span>
+                            <span class="text-[#E6EDF3]" x-text="confirmation.size"></span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-[#94A3B8]">Current Stock</span>
+                            <span class="text-[#E6EDF3]" x-text="confirmation.current_stock"></span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-[#94A3B8]">Adding</span>
+                            <span class="text-[#22C55E]" x-text="'+' + confirmation.change"></span>
+                        </div>
+                        <div class="border-t border-[#232A36] pt-3 flex justify-between text-sm font-medium">
+                            <span class="text-[#94A3B8]">New Stock</span>
+                            <span class="text-[#E6EDF3]" x-text="confirmation.new_stock"></span>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 text-center">
+                        <p class="text-sm text-[#94A3B8]">Auto-confirming in <span class="font-medium text-[#E6EDF3]" x-text="countdown"></span> seconds</p>
+                        <div class="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-[#232A36]">
+                            <div class="h-full bg-[#22C55E] transition-all duration-1000 ease-linear" x-bind:style="'width: ' + (countdown / 5 * 100) + '%'"></div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 flex gap-3">
+                        <button @click="confirmStockIn()" class="flex-1 rounded-xl bg-[#22C55E] px-4 py-2.5 text-sm font-medium text-white hover:bg-[#16A34A]">
+                            Confirm
+                        </button>
+                        <button @click="cancelAction()" class="flex-1 rounded-xl border border-[#232A36] px-4 py-2.5 text-sm font-medium text-[#94A3B8] hover:bg-[#1C2333]">
+                            Discard
+                        </button>
+                    </div>
+                </x-card>
+            </div>
+
+            <!-- Mobile: bottom sheet -->
+            <div x-show="showConfirmation" x-cloak
+                 x-transition:enter="transition ease-out duration-300"
+                 x-transition:enter-start="translate-y-full"
+                 x-transition:enter-end="translate-y-0"
+                 x-transition:leave="transition ease-in duration-200"
+                 x-transition:leave-start="translate-y-0"
+                 x-transition:leave-end="translate-y-full"
+                 class="fixed inset-x-0 bottom-0 z-50 rounded-t-2xl border border-[#232A36] bg-[#161B22] p-6 shadow-xl md:hidden">
+                <div class="mx-auto mb-4 h-1.5 w-10 rounded-full bg-[#232A36]"></div>
                 <div class="text-center">
                     <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#22C55E]/10">
                         <svg class="h-6 w-6 text-[#22C55E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -73,7 +135,6 @@
                     </div>
                     <h3 class="text-lg font-semibold text-[#E6EDF3]">Confirm Stock In</h3>
                 </div>
-
                 <div class="mt-6 space-y-3 rounded-xl bg-[#0F1117] p-4">
                     <div class="flex justify-between text-sm">
                         <span class="text-[#94A3B8]">Product</span>
@@ -96,23 +157,29 @@
                         <span class="text-[#E6EDF3]" x-text="confirmation.new_stock"></span>
                     </div>
                 </div>
-
                 <div class="mt-4 text-center">
-                    <p class="text-sm text-[#94A3B8]">Auto-confirming in <span class="font-medium text-[#E6EDF3]" x-text="countdown"></span> seconds</p>
+                    <p class="text-sm text-[#94A3B8]">Auto-confirming in <span class="font-medium text-[#E6EDF3]" x-text="countdown"></span>s</p>
                     <div class="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-[#232A36]">
                         <div class="h-full bg-[#22C55E] transition-all duration-1000 ease-linear" x-bind:style="'width: ' + (countdown / 5 * 100) + '%'"></div>
                     </div>
                 </div>
-
-                <div class="mt-6 flex gap-3">
-                    <button @click="confirmStockIn()" class="flex-1 rounded-xl bg-[#22C55E] px-4 py-2.5 text-sm font-medium text-white hover:bg-[#16A34A]">
+                <div class="mt-6 flex flex-col gap-3">
+                    <button @click="confirmStockIn()" class="rounded-xl bg-[#22C55E] px-4 py-3 text-sm font-medium text-white hover:bg-[#16A34A]">
                         Confirm
                     </button>
-                    <button @click="cancelAction()" class="flex-1 rounded-xl border border-[#232A36] px-4 py-2.5 text-sm font-medium text-[#94A3B8] hover:bg-[#1C2333]">
+                    <button @click="cancelAction()" class="rounded-xl border border-[#232A36] px-4 py-3 text-sm font-medium text-[#94A3B8] hover:bg-[#1C2333]">
                         Discard
                     </button>
                 </div>
-            </x-card>
+            </div>
+
+            <!-- Mobile backdrop -->
+            <div x-show="showConfirmation" x-cloak
+                 x-transition:enter="transition-opacity duration-300"
+                 x-transition:leave="transition-opacity duration-200"
+                 class="fixed inset-0 z-40 bg-black/50 md:hidden"
+                 @click="cancelAction()"
+                 aria-hidden="true"></div>
         </div>
 
         <!-- Success Message -->
