@@ -21,7 +21,10 @@ class StockManagementController extends Controller
         $totalInventory = Stock::sum('quantity');
 
         return view('stock-management.index', compact(
-            'products', 'stockIn30d', 'stockOut30d', 'totalInventory'
+            'products',
+            'stockIn30d',
+            'stockOut30d',
+            'totalInventory'
         ));
     }
 
@@ -47,9 +50,15 @@ class StockManagementController extends Controller
             ->where('module', 'stock')->with('user')->latest()->take(10)->get();
 
         return view('stock-management.show', compact(
-            'product', 'totalStock', 'totalSizes',
-            'stockIn30d', 'stockOut30d', 'stockInToday', 'stockOutToday',
-            'recentTransactions', 'workLogs'
+            'product',
+            'totalStock',
+            'totalSizes',
+            'stockIn30d',
+            'stockOut30d',
+            'stockInToday',
+            'stockOutToday',
+            'recentTransactions',
+            'workLogs'
         ));
     }
 

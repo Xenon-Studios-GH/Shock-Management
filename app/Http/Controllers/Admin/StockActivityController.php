@@ -38,8 +38,11 @@ class StockActivityController extends Controller
         $todayCount = StockTransaction::whereDate('created_at', today())->count();
 
         return view('stock-activity.index', compact(
-            'transactions', 'products',
-            'stockInCount', 'stockOutCount', 'todayCount'
+            'transactions',
+            'products',
+            'stockInCount',
+            'stockOutCount',
+            'todayCount'
         ));
     }
 }

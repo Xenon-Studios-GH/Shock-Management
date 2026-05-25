@@ -22,8 +22,11 @@ class DashboardController extends Controller
             ->whereDate('created_at', today())->sum('quantity');
 
         return view('dashboard.index', compact(
-            'totalWorkers', 'recentLogs',
-            'totalStock', 'stockInToday', 'stockOutToday'
+            'totalWorkers',
+            'recentLogs',
+            'totalStock',
+            'stockInToday',
+            'stockOutToday'
         ));
     }
 }
