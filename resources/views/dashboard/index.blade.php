@@ -2,7 +2,7 @@
     <div class="space-y-8">
         <p class="text-sm text-[#94A3B8]">Welcome back, {{ Auth::user()->name }} · <span class="text-[#3B82F6]">{{ ucfirst(Auth::user()->role) }}</span></p>
 
-        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
             <x-card>
                 <div class="flex items-center justify-between">
                     <div>
@@ -45,19 +45,6 @@
                 </div>
             </x-card>
 
-            <x-card>
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm text-[#94A3B8]">Transactions</p>
-                        <p class="mt-1 text-2xl font-bold text-[#E6EDF3]">{{ number_format($totalTransactions) }}</p>
-                    </div>
-                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#3B82F6]/10">
-                        <svg class="h-5 w-5 text-[#3B82F6]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
-                        </svg>
-                    </div>
-                </div>
-            </x-card>
         </div>
 
         <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
