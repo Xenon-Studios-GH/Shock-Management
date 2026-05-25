@@ -8,6 +8,7 @@ use App\Services\WorkLogService;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 
 class LoginController extends Controller
 {
@@ -42,6 +43,10 @@ class LoginController extends Controller
         }
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
+            if ($request->boolean('remember')) {
+                Config::set('session.lifetime', 43200);
+            }
+
             $request->session()->regenerate();
 
             $this->loginLogService->recordLogin($request->email, true, Auth::id());
