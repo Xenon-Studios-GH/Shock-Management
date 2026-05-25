@@ -144,28 +144,47 @@
 
         document.addEventListener('alpine:init', () => {
             let searchTimer;
-            document.getElementById('stockSearch').addEventListener('input', function() {
+            const searchInput = document.getElementById('stockSearch');
+            const tableContainer = document.getElementById('stockTableContainer');
+            searchInput.addEventListener('input', function() {
                 clearTimeout(searchTimer);
+                this.closest('.relative')?.classList.add('opacity-50');
                 searchTimer = setTimeout(() => {
                     fetch(`{{ route('stock.search') }}?q=${encodeURIComponent(this.value)}`)
                         .then(r => r.json())
-                        .then(data => document.getElementById('stockTableContainer').innerHTML = data.html);
+                        .then(data => {
+                            tableContainer.innerHTML = data.html;
+                            searchInput.closest('.relative')?.classList.remove('opacity-50');
+                        })
+                        .catch(() => searchInput.closest('.relative')?.classList.remove('opacity-50'));
                 }, 300);
             });
 
             document.getElementById('filterForm').addEventListener('submit', function(e) {
                 e.preventDefault();
+                const tableContainer = document.getElementById('stockTableContainer');
+                tableContainer.classList.add('opacity-50');
                 const params = new URLSearchParams(new FormData(this));
                 fetch(`{{ route('stock.filter') }}?${params}`)
                     .then(r => r.json())
-                    .then(data => document.getElementById('stockTableContainer').innerHTML = data.html);
+                    .then(data => {
+                        tableContainer.innerHTML = data.html;
+                        tableContainer.classList.remove('opacity-50');
+                    })
+                    .catch(() => tableContainer.classList.remove('opacity-50'));
             });
 
             document.getElementById('resetFilters').addEventListener('click', () => {
+                const tableContainer = document.getElementById('stockTableContainer');
+                tableContainer.classList.add('opacity-50');
                 document.getElementById('filterForm').reset();
                 fetch(`{{ route('stock.filter') }}`)
                     .then(r => r.json())
-                    .then(data => document.getElementById('stockTableContainer').innerHTML = data.html);
+                    .then(data => {
+                        tableContainer.innerHTML = data.html;
+                        tableContainer.classList.remove('opacity-50');
+                    })
+                    .catch(() => tableContainer.classList.remove('opacity-50'));
             });
         });
     </script>

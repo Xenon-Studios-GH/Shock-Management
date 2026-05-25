@@ -53,7 +53,7 @@
                     <tbody class="divide-y divide-[#232A36]">
                         @forelse ($logs as $log)
                             <tr class="transition-colors hover:bg-[#1C2333]">
-                                <td class="whitespace-nowrap px-6 py-4 text-[#E6EDF3]">{{ $log->user->name }}</td>
+                                <td class="whitespace-nowrap px-6 py-4 text-[#E6EDF3]">{{ $log->user?->name ?? '—' }}</td>
                                 <td class="whitespace-nowrap px-6 py-4">
                                     <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-[#3B82F6]/10 text-[#3B82F6]">
                                         {{ $log->action }}
@@ -84,7 +84,7 @@
             @forelse ($logs as $log)
                 <x-card class="space-y-3">
                     <div class="flex items-center justify-between">
-                        <span class="text-sm font-medium text-[#E6EDF3]">{{ $log->user->name }}</span>
+                        <span class="text-sm font-medium text-[#E6EDF3]">{{ $log->user?->name ?? '—' }}</span>
                         <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-[#3B82F6]/10 text-[#3B82F6]">
                             {{ $log->action }}
                         </span>
