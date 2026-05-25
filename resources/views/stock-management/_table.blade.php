@@ -1,4 +1,4 @@
-<x-card padding="p-0">
+<x-card padding="p-0" class="hidden lg:block">
     <div class="overflow-x-auto">
         <table class="w-full text-sm">
             <thead>
@@ -83,6 +83,80 @@
         </div>
     @endif
 </x-card>
+
+<!-- Mobile: Card Layout -->
+<div class="block lg:hidden space-y-3">
+    @forelse ($products as $product)
+        @forelse ($product->stocks as $stock)
+            <x-card class="space-y-3">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-[#E6EDF3]">{{ $product->product_name }}</p>
+                        <p class="text-xs text-[#94A3B8] font-mono">{{ $product->product_code }}</p>
+                    </div>
+                    <span class="rounded-lg bg-[#232A36] px-2 py-0.5 text-xs font-medium text-[#E6EDF3]">{{ $stock->size }}</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-xs text-[#94A3B8]">Stock</span>
+                    <span class="text-sm font-medium {{ $stock->quantity > 10 ? 'text-[#22C55E]' : ($stock->quantity > 0 ? 'text-[#F59E0B]' : 'text-[#EF4444]') }}">
+                        {{ $stock->quantity }}
+                    </span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-xs text-[#94A3B8]">Price</span>
+                    <span class="text-sm text-[#94A3B8]">৳{{ number_format($product->price, 2) }}</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-xs text-[#94A3B8]">Updated</span>
+                    <span class="text-xs text-[#94A3B8]">{{ $stock->updated_at->diffForHumans() }}</span>
+                </div>
+                <div class="pt-2 border-t border-[#232A36]">
+                    <button type="button" class="edit-btn w-full rounded-xl bg-[#3B82F6]/10 px-4 py-2.5 text-sm font-medium text-[#3B82F6] hover:bg-[#3B82F6]/20"
+                            data-id="{{ $product->id }}"
+                            data-name="{{ $product->product_name }}"
+                            data-price="{{ $product->price }}">
+                        Edit Product
+                    </button>
+                </div>
+            </x-card>
+        @empty
+            <x-card class="space-y-3">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-[#E6EDF3]">{{ $product->product_name }}</p>
+                        <p class="text-xs text-[#94A3B8] font-mono">{{ $product->product_code }}</p>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-xs text-[#94A3B8]">Stock</span>
+                    <span class="text-sm font-medium text-[#EF4444]">0</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-xs text-[#94A3B8]">Price</span>
+                    <span class="text-sm text-[#94A3B8]">৳{{ number_format($product->price, 2) }}</span>
+                </div>
+                <div class="pt-2 border-t border-[#232A36]">
+                    <button type="button" class="edit-btn w-full rounded-xl bg-[#3B82F6]/10 px-4 py-2.5 text-sm font-medium text-[#3B82F6]"
+                            data-id="{{ $product->id }}"
+                            data-name="{{ $product->product_name }}"
+                            data-price="{{ $product->price }}">
+                        Edit Product
+                    </button>
+                </div>
+            </x-card>
+        @endforelse
+    @empty
+        <x-card class="py-12 text-center">
+            <p class="text-sm text-[#94A3B8]">No products found.</p>
+        </x-card>
+    @endforelse
+
+    @if ($products->hasPages())
+        <div class="pt-3">
+            {{ $products->links() }}
+        </div>
+    @endif
+</div>
 
 <!-- Edit Modal -->
 <div id="editModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/50" role="dialog" aria-modal="true" aria-labelledby="modal-title">
