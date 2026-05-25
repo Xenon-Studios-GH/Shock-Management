@@ -1,10 +1,6 @@
 <x-layouts.app title="Dashboard">
     <div class="space-y-8">
-        <div>
-            <h1 class="text-2xl font-bold text-[#E6EDF3]">Dashboard</h1>
-            <p class="mt-1 text-sm text-[#94A3B8]">Welcome back, {{ Auth::user()->name }}</p>
-            <p class="text-xs text-[#3B82F6]">{{ ucfirst(Auth::user()->role) }}</p>
-        </div>
+        <p class="text-sm text-[#94A3B8]">Welcome back, {{ Auth::user()->name }} · <span class="text-[#3B82F6]">{{ ucfirst(Auth::user()->role) }}</span></p>
 
         <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             <x-card>
