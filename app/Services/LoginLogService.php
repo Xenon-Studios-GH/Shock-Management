@@ -29,7 +29,9 @@ class LoginLogService
 
     public function getLogs(array $filters = [])
     {
-        $query = LoginLog::with('user')->latest('login_at');
+        $query = LoginLog::with('user')
+            ->where('login_at', '>=', now()->subDays(90))
+            ->latest('login_at');
 
         if (!empty($filters['user_id'])) {
             $query->where('user_id', $filters['user_id']);

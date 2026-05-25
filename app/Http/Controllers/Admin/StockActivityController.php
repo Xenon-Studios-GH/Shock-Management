@@ -11,7 +11,8 @@ class StockActivityController extends Controller
 {
     public function __invoke(Request $request)
     {
-        $query = StockTransaction::with('product', 'user');
+        $query = StockTransaction::with('product', 'user')
+            ->where('created_at', '>=', now()->subDays(90));
 
         if ($request->filled('type') && in_array($request->type, ['in', 'out'])) {
             $query->where('type', $request->type);
