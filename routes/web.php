@@ -1,8 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\Auth\ForgotPasswordController;
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\Auth\LogoutController;
+use App\Http\Controllers\Admin\Auth\ResetPasswordController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\StockManagementController;
 use App\Http\Controllers\Admin\StockInController;
@@ -18,6 +20,11 @@ use App\Http\Controllers\Admin\WorkLogController;
 Route::middleware('guest')->group(function () {
     Route::get('login', [LoginController::class, 'create'])->name('login');
     Route::post('login', [LoginController::class, 'store'])->middleware('throttle:5,1');
+
+    Route::get('forgot-password', [ForgotPasswordController::class, 'create'])->name('password.request');
+    Route::post('forgot-password', [ForgotPasswordController::class, 'store'])->name('password.email')->middleware('throttle:3,1');
+    Route::get('reset-password/{token}', [ResetPasswordController::class, 'create'])->name('password.reset');
+    Route::post('reset-password', [ResetPasswordController::class, 'store'])->name('password.update')->middleware('throttle:3,1');
 });
 
 Route::middleware('auth')->group(function () {
@@ -36,13 +43,13 @@ Route::middleware('auth')->group(function () {
 
     // Stock In
     Route::get('stockin', [StockInController::class, 'index'])->name('stock.in');
-    Route::post('stockin/preview', [StockInController::class, 'preview'])->name('stock.in.preview');
-    Route::post('stockin/confirm', [StockInController::class, 'confirm'])->name('stock.in.confirm');
+    Route::post('stockin/preview', [StockInController::class, 'preview'])->middleware('throttle:30,1')->name('stock.in.preview');
+    Route::post('stockin/confirm', [StockInController::class, 'confirm'])->middleware('throttle:20,1')->name('stock.in.confirm');
 
     // Stock Out
     Route::get('stockout', [StockOutController::class, 'index'])->name('stock.out');
-    Route::post('stockout/preview', [StockOutController::class, 'preview'])->name('stock.out.preview');
-    Route::post('stockout/confirm', [StockOutController::class, 'confirm'])->name('stock.out.confirm');
+    Route::post('stockout/preview', [StockOutController::class, 'preview'])->middleware('throttle:30,1')->name('stock.out.preview');
+    Route::post('stockout/confirm', [StockOutController::class, 'confirm'])->middleware('throttle:20,1')->name('stock.out.confirm');
 
     // Product
     Route::middleware('role:superadmin,admin')->group(function () {
