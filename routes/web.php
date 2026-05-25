@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\StockInController;
 use App\Http\Controllers\Admin\StockOutController;
 use App\Http\Controllers\Admin\StockSearchController;
 use App\Http\Controllers\Admin\StockFilterController;
+use App\Http\Controllers\Admin\StockActivityController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\WorkerController;
 use App\Http\Controllers\Admin\LoginLogController;
@@ -31,6 +32,7 @@ Route::middleware('auth')->group(function () {
     Route::get('stock/search', StockSearchController::class)->name('stock.search');
     Route::get('stock/filter', StockFilterController::class)->name('stock.filter');
     Route::put('stock/products/{product}', [ProductController::class, 'update'])->name('stock.products.update');
+    Route::get('stock-activity', StockActivityController::class)->name('stock.activity');
 
     // Stock In
     Route::get('stockin', [StockInController::class, 'index'])->name('stock.in');
