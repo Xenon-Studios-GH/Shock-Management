@@ -7,7 +7,7 @@
 
         <!-- Step 1: Form -->
         <x-card x-show="!showConfirmation" x-transition>
-            <form @submit.prevent="submitPreview" class="space-y-6">
+            <form @submit.prevent="submitPreview" novalidate class="space-y-6">
                 <div>
                     <label class="mb-2 block text-sm font-medium text-[#E6EDF3]">Product</label>
                     <select x-model="product_id" name="product_id" required
