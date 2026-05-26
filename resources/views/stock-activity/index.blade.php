@@ -109,8 +109,7 @@
             document.getElementById('activityFilterForm').addEventListener('submit', function(e) {
                 e.preventDefault();
                 const params = new URLSearchParams(new FormData(this));
-                fetch('{{ route('
-                        stock.activity ') }}?' + params.toString())
+                fetch('{{ route('stock.activity') }}?' + params.toString())
                     .then(r => r.text())
                     .then(html => {
                         const parser = new DOMParser();
@@ -124,8 +123,7 @@
 
             document.getElementById('resetActivityFilters').addEventListener('click', function() {
                 document.getElementById('activityFilterForm').reset();
-                fetch('{{ route('
-                        stock.activity ') }}')
+                fetch('{{ route('stock.activity') }}')
                     .then(r => r.text())
                     .then(html => {
                         const parser = new DOMParser();

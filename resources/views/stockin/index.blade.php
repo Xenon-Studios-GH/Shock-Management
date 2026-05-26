@@ -16,23 +16,7 @@
                         @foreach ($products as $product)
                         <option value="{{ $product->id }}">{{ $product->product_code }} — {{ $product->product_name }}</option>
                         @endforeach
-                        <option value="new">+ New Product</option>
                     </select>
-                </div>
-
-                <div x-show="product_id === 'new'" x-transition>
-                    <div class="space-y-4 rounded-xl border border-[#232A36] bg-[#0F1117] p-4">
-                        <div>
-                            <label class="mb-1 block text-sm font-medium text-[#E6EDF3]">Product Name</label>
-                            <input type="text" x-model="product_name" required
-                                class="w-full rounded-xl border border-[#232A36] bg-[#161B22] px-4 py-2.5 text-sm text-[#E6EDF3] focus:border-[#3B82F6] focus:outline-none">
-                        </div>
-                        <div>
-                            <label class="mb-1 block text-sm font-medium text-[#E6EDF3]">Price (৳)</label>
-                            <input type="number" step="0.01" x-model="price" required
-                                class="w-full rounded-xl border border-[#232A36] bg-[#161B22] px-4 py-2.5 text-sm text-[#E6EDF3] focus:border-[#3B82F6] focus:outline-none">
-                        </div>
-                    </div>
                 </div>
 
                 <div>
@@ -99,13 +83,6 @@
                         </div>
                     </div>
 
-                    <div class="mt-4 text-center">
-                        <p class="text-sm text-[#94A3B8]">Confirming automatically in <span class="font-medium text-[#E6EDF3]" x-text="countdown"></span> seconds</p>
-                        <div class="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-[#232A36]">
-                            <div class="h-full bg-[#22C55E] transition-all duration-1000 ease-linear" x-bind:style="'width: ' + (countdown / 5 * 100) + '%'"></div>
-                        </div>
-                    </div>
-
                     <div class="mt-6 flex gap-3">
                         <button @click="confirmStockIn()" class="flex-1 rounded-xl bg-[#22C55E] px-4 py-2.5 text-sm font-medium text-white hover:bg-[#16A34A]">
                             Confirm
@@ -155,12 +132,6 @@
                     <div class="border-t border-[#232A36] pt-3 flex justify-between text-sm font-medium">
                         <span class="text-[#94A3B8]">New Stock</span>
                         <span class="text-[#E6EDF3]" x-text="confirmation.new_stock"></span>
-                    </div>
-                </div>
-                <div class="mt-4 text-center">
-                    <p class="text-sm text-[#94A3B8]">Confirming automatically in <span class="font-medium text-[#E6EDF3]" x-text="countdown"></span>s</p>
-                    <div class="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-[#232A36]">
-                        <div class="h-full bg-[#22C55E] transition-all duration-1000 ease-linear" x-bind:style="'width: ' + (countdown / 5 * 100) + '%'"></div>
                     </div>
                 </div>
                 <div class="mt-6 flex flex-col gap-3">
@@ -215,86 +186,62 @@
         function stockInApp() {
             return {
                 product_id: '',
-                product_name: '',
-                price: '',
                 size: '',
                 quantity: '',
                 showConfirmation: false,
                 showSuccess: false,
                 error: '',
-                countdown: 5,
                 confirmation: {},
-                timer: null,
 
                 submitPreview() {
                     this.error = '';
-                    fetch('{{ route('
-                            stock.in.preview ') }}', {
+                    fetch('{{ route('stock.in.preview') }}', {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json',
+                                    'Accept': 'application/json',
                                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                                 },
                                 body: JSON.stringify({
                                     product_id: this.product_id,
-                                    product_name: this.product_name,
-                                    price: this.price,
                                     size: this.size,
                                     quantity: this.quantity,
                                 })
                             })
-                        .then(r => r.json())
+                        .then(r => r.ok ? r.json() : r.json().then(d => Promise.reject(d)))
                         .then(data => {
-                            if (data.success === false) {
-                                this.error = data.message;
-                                return;
-                            }
                             this.confirmation = data;
                             this.showConfirmation = true;
-                            this.countdown = 5;
-                            this.timer = setInterval(() => {
-                                this.countdown--;
-                                if (this.countdown <= 0) this.confirmStockIn();
-                            }, 1000);
                         })
-                        .catch(e => this.error = 'An error occurred.');
+                        .catch(e => this.error = e.message || Object.values(e.errors || {}).flat().join(' ') || 'An error occurred.');
                 },
 
                 confirmStockIn() {
-                    clearInterval(this.timer);
-                    let body = {
-                        product_id: this.confirmation.product_id,
-                        size: this.confirmation.size,
-                        quantity: this.confirmation.quantity || Math.abs(this.confirmation.change),
-                    };
-                    if (this.confirmation.product_id === 'new') {
-                        body.product_name = this.product_name;
-                        body.price = this.price;
-                    }
-                    fetch('{{ route('
-                            stock.in.confirm ') }}', {
+                    fetch('{{ route('stock.in.confirm') }}', {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json',
+                                    'Accept': 'application/json',
                                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                                 },
-                                body: JSON.stringify(body),
+                                body: JSON.stringify({
+                                    product_id: this.confirmation.product_id,
+                                    size: this.confirmation.size,
+                                    quantity: this.confirmation.quantity || Math.abs(this.confirmation.change),
+                                })
                             })
-                        .then(r => r.json())
+                        .then(r => r.ok ? r.json() : r.json().then(d => Promise.reject(d)))
                         .then(data => {
-                            if (data.success) {
-                                window.location.href = '/stock-management/' + data.product_id;
-                            } else {
-                                this.error = data.message;
-                                this.showConfirmation = false;
-                            }
+                            window.location.href = '/stock-management/' + data.product_id;
+                        })
+                        .catch(e => {
+                            this.error = e.message || Object.values(e.errors || {}).flat().join(' ') || 'An unexpected error occurred.';
+                            this.showConfirmation = false;
                         });
                 },
 
                 resetForm() {
                     this.product_id = '';
-                    this.product_name = '';
-                    this.price = '';
                     this.size = '';
                     this.quantity = '';
                     this.showSuccess = false;
@@ -302,9 +249,7 @@
                 },
 
                 cancelAction() {
-                    clearInterval(this.timer);
                     this.showConfirmation = false;
-                    this.countdown = 5;
                 }
             }
         }

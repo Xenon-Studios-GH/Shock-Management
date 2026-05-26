@@ -81,13 +81,6 @@
                         </div>
                     </div>
 
-                    <div class="mt-4 text-center">
-                        <p class="text-sm text-[#94A3B8]">Confirming automatically in <span class="font-medium text-[#E6EDF3]" x-text="countdown"></span> seconds</p>
-                        <div class="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-[#232A36]">
-                            <div class="h-full bg-[#EF4444] transition-all duration-1000 ease-linear" x-bind:style="'width: ' + (countdown / 5 * 100) + '%'"></div>
-                        </div>
-                    </div>
-
                     <div class="mt-6 flex gap-3">
                         <button @click="confirmStockOut()" class="flex-1 rounded-xl bg-[#EF4444] px-4 py-2.5 text-sm font-medium text-white hover:bg-[#DC2626]">
                             Confirm
@@ -137,12 +130,6 @@
                     <div class="border-t border-[#232A36] pt-3 flex justify-between text-sm font-medium">
                         <span class="text-[#94A3B8]">New Stock</span>
                         <span class="text-[#E6EDF3]" x-text="confirmation.new_stock"></span>
-                    </div>
-                </div>
-                <div class="mt-4 text-center">
-                    <p class="text-sm text-[#94A3B8]">Confirming automatically in <span class="font-medium text-[#E6EDF3]" x-text="countdown"></span>s</p>
-                    <div class="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-[#232A36]">
-                        <div class="h-full bg-[#EF4444] transition-all duration-1000 ease-linear" x-bind:style="'width: ' + (countdown / 5 * 100) + '%'"></div>
                     </div>
                 </div>
                 <div class="mt-6 flex flex-col gap-3">
@@ -200,17 +187,15 @@
                 showConfirmation: false,
                 showSuccess: false,
                 error: '',
-                countdown: 5,
                 confirmation: {},
-                timer: null,
 
                 submitPreview() {
                     this.error = '';
-                    fetch('{{ route('
-                            stock.out.preview ') }}', {
+                    fetch('{{ route('stock.out.preview') }}', {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json',
+                                    'Accept': 'application/json',
                                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                                 },
                                 body: JSON.stringify({
@@ -219,30 +204,20 @@
                                     quantity: this.quantity,
                                 })
                             })
-                        .then(r => r.json())
+                        .then(r => r.ok ? r.json() : r.json().then(d => Promise.reject(d)))
                         .then(data => {
-                            if (data.success === false) {
-                                this.error = data.message;
-                                return;
-                            }
                             this.confirmation = data;
                             this.showConfirmation = true;
-                            this.countdown = 5;
-                            this.timer = setInterval(() => {
-                                this.countdown--;
-                                if (this.countdown <= 0) this.confirmStockOut();
-                            }, 1000);
                         })
-                        .catch(e => this.error = 'An error occurred.');
+                        .catch(e => this.error = e.message || Object.values(e.errors || {}).flat().join(' ') || 'An error occurred.');
                 },
 
                 confirmStockOut() {
-                    clearInterval(this.timer);
-                    fetch('{{ route('
-                            stock.out.confirm ') }}', {
+                    fetch('{{ route('stock.out.confirm') }}', {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json',
+                                    'Accept': 'application/json',
                                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                                 },
                                 body: JSON.stringify({
@@ -251,14 +226,13 @@
                                     quantity: Math.abs(this.confirmation.change),
                                 })
                             })
-                        .then(r => r.json())
+                        .then(r => r.ok ? r.json() : r.json().then(d => Promise.reject(d)))
                         .then(data => {
-                            if (data.success) {
-                                window.location.href = '/stock-management/' + data.product_id;
-                            } else {
-                                this.error = data.message;
-                                this.showConfirmation = false;
-                            }
+                            window.location.href = '/stock-management/' + data.product_id;
+                        })
+                        .catch(e => {
+                            this.error = e.message || Object.values(e.errors || {}).flat().join(' ') || 'An unexpected error occurred.';
+                            this.showConfirmation = false;
                         });
                 },
 
@@ -271,9 +245,7 @@
                 },
 
                 cancelAction() {
-                    clearInterval(this.timer);
                     this.showConfirmation = false;
-                    this.countdown = 5;
                 }
             }
         }

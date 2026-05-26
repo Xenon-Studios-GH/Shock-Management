@@ -60,25 +60,22 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-[#232A36]">
-                            @forelse ($product->stocks as $stock)
+                            @foreach (\App\Models\Stock::SIZES as $size)
+                            @php $stock = $product->stocks->firstWhere('size', $size); @endphp
                             <tr>
-                                <td class="py-3 text-[#E6EDF3] font-medium">{{ $stock->size }}</td>
-                                <td class="py-3 text-right font-mono text-[#E6EDF3]">{{ number_format($stock->quantity) }}</td>
+                                <td class="py-3 text-[#E6EDF3] font-medium">{{ $size }}</td>
+                                <td class="py-3 text-right font-mono text-[#E6EDF3]">{{ number_format($stock ? $stock->quantity : 0) }}</td>
                                 <td class="py-3 text-right">
-                                    @if ($stock->quantity > 10)
+                                    @if ($stock && $stock->quantity > 10)
                                     <span class="inline-flex items-center gap-1 rounded-full bg-[#22C55E]/10 px-2 py-0.5 text-xs font-medium text-[#22C55E]">In Stock</span>
-                                    @elseif ($stock->quantity > 0)
+                                    @elseif ($stock && $stock->quantity > 0)
                                     <span class="inline-flex items-center gap-1 rounded-full bg-[#F59E0B]/10 px-2 py-0.5 text-xs font-medium text-[#F59E0B]">Low Stock</span>
                                     @else
                                     <span class="inline-flex items-center gap-1 rounded-full bg-[#EF4444]/10 px-2 py-0.5 text-xs font-medium text-[#EF4444]">Out of Stock</span>
                                     @endif
                                 </td>
                             </tr>
-                            @empty
-                            <tr>
-                                <td colspan="3" class="py-6 text-center text-sm text-[#94A3B8]">No stock records found.</td>
-                            </tr>
-                            @endforelse
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -90,13 +87,6 @@
                 <div id="timelineContainer" class="space-y-0">
                     @include('stock-management._transactions')
                 </div>
-                @if ($recentTransactions->hasMorePages())
-                <button id="loadMoreBtn"
-                    class="mt-4 w-full rounded-xl border border-[#232A36] px-4 py-2.5 text-sm text-[#94A3B8] hover:bg-[#1C2333] hover:text-[#E6EDF3]"
-                    data-next="{{ $recentTransactions->nextPageUrl() }}">
-                    Load More
-                </button>
-                @endif
             </x-card>
         </div>
 
@@ -219,38 +209,7 @@
                 }
             });
 
-            // Load More
-            const loadMoreBtn = document.getElementById('loadMoreBtn');
-            const timelineContainer = document.getElementById('timelineContainer');
 
-            if (loadMoreBtn) {
-                loadMoreBtn.addEventListener('click', function() {
-                    const nextUrl = this.dataset.next;
-                    if (!nextUrl) return;
-
-                    this.disabled = true;
-                    this.textContent = 'Loading...';
-
-                    fetch(nextUrl)
-                        .then(r => r.json())
-                        .then(data => {
-                            if (data.html) {
-                                timelineContainer.insertAdjacentHTML('beforeend', data.html);
-                            }
-                            if (data.next) {
-                                loadMoreBtn.dataset.next = data.next;
-                                loadMoreBtn.disabled = false;
-                                loadMoreBtn.textContent = 'Load More';
-                            } else {
-                                loadMoreBtn.remove();
-                            }
-                        })
-                        .catch(() => {
-                            loadMoreBtn.disabled = false;
-                            loadMoreBtn.textContent = 'Load More';
-                        });
-                });
-            }
         });
     </script>
 </x-layouts.app>

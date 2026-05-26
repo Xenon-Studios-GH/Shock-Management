@@ -44,7 +44,7 @@ class StockManagementController extends Controller
             ->where('type', 'out')->whereDate('created_at', today())->sum('quantity');
 
         $recentTransactions = StockTransaction::where('product_id', $product->id)
-            ->with('user')->latest()->paginate(20);
+            ->with('user')->latest()->take(5)->get();
 
         $workLogs = WorkLog::where('reference_id', $product->id)
             ->where('module', 'stock')->with('user')->latest()->take(10)->get();

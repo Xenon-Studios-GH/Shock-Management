@@ -94,11 +94,13 @@ php artisan serve
 
 ## Default Users (Development)
 
-| Email | Role | Password |
-|-------|------|----------|
-| notmunthasir@dribblingbd.com | superadmin | _(set during seeding)_ |
-| irfanmahi@dribblingbd.com | admin | _(set during seeding)_ |
-| badshah@dribblingbd.com | admin | _(set during seeding)_ |
+All default users have password: `password`
+
+| Email | Name | Role |
+|-------|------|------|
+| notmunthasir@dribblingbd.com | Munthasir Rahman | superadmin |
+| irfanmahi@dribblingbd.com | Irfan Mahi | admin |
+| badshah@dribblingbd.com | Badshah | admin |
 
 ## Project Structure
 
